@@ -1,214 +1,142 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ADAM ABABOU | 1BACSE-6</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+<meta charset="UTF-8">
+<title>Adam Ababou Hacker Style</title>
 
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(black, #0a0a0a);
-      color: #00ff41;
-      font-family: 'Cairo', sans-serif;
-      background-image: 
-        linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
-      background-size: 50px 50px;
-    }
+<style>
+body {
+    margin: 0;
+    font-family: 'Courier New', monospace;
+    background: black;
+    color: #00ff00;
+}
 
-    header {
-      background: rgba(0, 0, 0, 0.95);
-      border-bottom: 3px solid #00ff41;
-      padding: 20px;
-      text-align: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 0 20px #00ff41;
-    }
+/* Navbar */
+.navbar {
+    background: #111;
+    display: flex;
+    padding: 10px;
+    overflow-x: auto;
+}
 
-    .hacker-skull {
-      font-size: 4rem;
-      filter: drop-shadow(0 0 15px #00ff41);
-      animation: glitch 1.5s infinite;
-    }
+.navbar a {
+    color: #00ff00;
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: 0.3s;
+}
 
-    @keyframes glitch {
-      0% { text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff; }
-      20% { text-shadow: -2px 0 #ff00ff, 2px 0 #00ffff; }
-    }
+.navbar a:hover {
+    background: #00ff00;
+    color: black;
+}
 
-    h1 {
-      margin: 10px 0;
-      font-size: 3.5rem;
-      text-shadow: 0 0 20px #00ff41;
-      letter-spacing: 5px;
-    }
+/* Header */
+header {
+    text-align: center;
+    padding: 40px;
+}
 
-    .tabs {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.8);
-      border-bottom: 2px solid #00ff41;
-    }
+h1 {
+    font-size: 40px;
+}
 
-    .tab-btn {
-      padding: 15px 25px;
-      background: #111;
-      color: #00ff41;
-      border: 2px solid #00ff41;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: all 0.3s;
-      min-width: 180px;
-    }
+/* Hacker effect */
+.hacker {
+    font-size: 20px;
+    animation: glitch 1s infinite;
+}
 
-    .tab-btn:hover, .tab-btn.active {
-      background: #00ff41;
-      color: black;
-      box-shadow: 0 0 25px #00ff41;
-      transform: scale(1.05);
-    }
+@keyframes glitch {
+    0% {color: #00ff00;}
+    50% {color: red;}
+    100% {color: #00ff00;}
+}
 
-    .tab-content {
-      display: none;
-      padding: 40px;
-      max-width: 1100px;
-      margin: 0 auto;
-      min-height: 70vh;
-    }
+/* Sections */
+.section {
+    padding: 40px;
+    border-top: 1px solid #00ff00;
+}
 
-    .tab-content.active {
-      display: block;
-    }
+.card {
+    background: #111;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #00ff00;
+}
 
-    .card {
-      background: rgba(20, 20, 20, 0.95);
-      border: 1px solid #00ff41;
-      padding: 30px;
-      margin: 20px 0;
-      box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
-      border-radius: 8px;
-    }
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #111;
+}
+</style>
 
-    .messi-btn {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 18px 35px;
-      background: #00ff41;
-      color: black;
-      font-size: 1.3rem;
-      font-weight: bold;
-      text-decoration: none;
-      border: 3px solid #00ff41;
-      box-shadow: 0 0 20px #00ff41;
-      transition: all 0.4s;
-    }
-
-    .messi-btn:hover {
-      background: black;
-      color: #00ff41;
-      transform: scale(1.08);
-      box-shadow: 0 0 40px #00ff41;
-    }
-  </style>
 </head>
+
 <body>
 
-  <header>
-    <div class="hacker-skull">☠️</div>
-    <h1>ADAM ABABOU</h1>
-    <p class="subtitle">ملك 1BACSE-6 • الهاكرز • GOAT ديال القسم</p>
-  </header>
+<!-- Navbar -->
+<div class="navbar">
+    <a href="#">Accueil</a>
+    <a href="#">Profil</a>
+    <a href="#">Cours</a>
+    <a href="#">Hack Tools</a>
+    <a href="#">1bacse-6</a>
+    <a href="#">Contact</a>
+    <a href="#">More</a>
+</div>
 
-  <div class="tabs">
-    <button class="tab-btn active" onclick="openTab(event, 'home')">الرئيسية</button>
-    <button class="tab-btn" onclick="openTab(event, 'about')">عن أدم</button>
-    <button class="tab-btn" onclick="openTab(event, 'class')">1BACSE-6</button>
-    <button class="tab-btn" onclick="openTab(event, 'hacks')">هاكز وتراب</button>
-    <button class="tab-btn" onclick="openTab(event, 'gallery')">غاليري</button>
-    <button class="tab-btn" onclick="openTab(event, 'contact')">تواصل</button>
-  </div>
+<!-- Header -->
+<header>
+    <h1>💀 Hacker Zone 💀</h1>
+    <p class="hacker">Welcome to the dark system...</p>
 
-  <!-- الرئيسية -->
-  <div id="home" class="tab-content active">
+    <!-- Clickable name -->
+    <h2>
+        <a href="https://fr.wikipedia.org/wiki/Lionel_Messi" target="_blank" style="color:#00ff00;">
+            Adam Ababou
+        </a>
+    </h2>
+
+    <p>Classe: 1bacse-6</p>
+</header>
+
+<!-- Sections -->
+<div class="section">
     <div class="card">
-      <h2>مرحبا في مملكة أدم عبابو</h2>
-      <p>سموك وايپ وايپ... گلیزر بومه... توين توين 🔥</p>
+        <h2>📚 Cours</h2>
+        <p>Math, Physique, SVT, Informatique...</p>
     </div>
-  </div>
 
-  <!-- عن أدم (الصفحة الجديدة مع رابط ميسي) -->
-  <div id="about" class="tab-content">
     <div class="card">
-      <h2>من هو أدم عبابو؟</h2>
-      <p>هاكر، ترابر، ملك 1BACSE-6، وصاحب الستايل اللي ما ينضربش.</p>
-      <p>كي دخل القسم... الكل عرف بلي جاء الـGOAT.</p>
-      
-      <h2>أدم عبابو = ليونيل ميسي ديال سلا والرباط</h2>
-      <p>الأسطورة اللي كتغير اللعبة بوحدها.</p>
-      
-      <a href="https://ar.wikipedia.org/wiki/%D9%84%D9%8A%D9%88%D9%86%D9%8A%D9%84_%D9%85%D9%8A%D8%B3%D9%8A" 
-         target="_blank" class="messi-btn">
-        ادخل لصفحة ويكيبيديا ديال ليونيل ميسي
-      </a>
-      
-      <p style="margin-top:30px; opacity:0.8;">
-        (باش تشوف الأسطورة الحقيقية اللي أدم كيتشبه بيها)
-      </p>
+        <h2>💻 Hacker Style</h2>
+        <p>Access granted... System loading...</p>
     </div>
-  </div>
 
-  <!-- باقي الأقسام (مختصرة) -->
-  <div id="class" class="tab-content">
     <div class="card">
-      <h2>قسم 1BACSE-6</h2>
-      <p>أقوى قسم فالمغرب. أدم عبابو هو الملك ديالو.</p>
+        <h2>🔥 Projets</h2>
+        <p>Création de sites, scripts, idées futuristes...</p>
     </div>
-  </div>
 
-  <div id="hacks" class="tab-content">
     <div class="card">
-      <h2>هاكز وتراب</h2>
-      <p>سموك وايپ وايپ<br>گلیزر بومه بوم<br>توين توين أدم جاي يدمر</p>
+        <h2>📊 Dashboard</h2>
+        <p>Notes, progression, statistiques...</p>
     </div>
-  </div>
 
-  <div id="gallery" class="tab-content">
     <div class="card">
-      <h2>غاليري الملك</h2>
-      <p>هنا غادي تضع الصور والميمز...</p>
+        <h2>🧠 Inspiration</h2>
+        <p>Think like a hacker, move like a boss.</p>
     </div>
-  </div>
+</div>
 
-  <div id="contact" class="tab-content">
-    <div class="card">
-      <h2>تواصل مع الملك</h2>
-      <p>أنت كتعرف فين تلقاني 😉</p>
-    </div>
-  </div>
-
-  <script>
-    function openTab(evt, tabName) {
-      var i, tabcontent, tablinks;
-      tabcontent = document.getElementsByClassName("tab-content");
-      for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-      }
-      tablinks = document.getElementsByClassName("tab-btn");
-      for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-      }
-      document.getElementById(tabName).style.display = "block";
-      evt.currentTarget.className += " active";
-    }
-  </script>
+<footer>
+    <p>© 2026 - Adam Ababou | Hacker Edition</p>
+</footer>
 
 </body>
 </html>
