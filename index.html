@@ -1,125 +1,183 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>Snake Game 🐍</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snake Mobile 🐍</title>
 
 <style>
 body {
-    background: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    font-family: Arial;
-    color: white;
+    margin:0;
+    background:black;
+    color:white;
+    text-align:center;
+    font-family:Arial;
 }
 
 canvas {
-    background: #111;
-    box-shadow: 0 0 20px lime;
+    background:#111;
+    margin-top:10px;
+    border:2px solid lime;
+    touch-action: none;
 }
 
-h1 {
-    position: absolute;
-    top: 20px;
+/* Buttons */
+.controls {
+    margin-top:15px;
+}
+
+.btn {
+    width:60px;
+    height:60px;
+    margin:5px;
+    font-size:25px;
+    background:#222;
+    color:lime;
+    border:none;
+    border-radius:10px;
+}
+
+.btn:active {
+    background:lime;
+    color:black;
 }
 </style>
 </head>
 
 <body>
 
-<h1>🐍 Snake Game</h1>
-<canvas id="game" width="400" height="400"></canvas>
+<h2>🐍 Snake Mobile</h2>
+<p>Score: <span id="score">0</span></p>
+
+<canvas id="game" width="300" height="300"></canvas>
+
+<div class="controls">
+    <div>
+        <button class="btn" onclick="setDir('UP')">⬆️</button>
+    </div>
+    <div>
+        <button class="btn" onclick="setDir('LEFT')">⬅️</button>
+        <button class="btn" onclick="setDir('DOWN')">⬇️</button>
+        <button class="btn" onclick="setDir('RIGHT')">➡️</button>
+    </div>
+</div>
 
 <script>
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-const box = 20;
-let snake = [{x: 200, y: 200}];
+const box = 15;
+let snake = [{x:150, y:150}];
 let direction = "RIGHT";
 
-let food = {
-    x: Math.floor(Math.random()*20)*box,
-    y: Math.floor(Math.random()*20)*box
-};
-
+let food = randomFood();
 let score = 0;
 
-document.addEventListener("keydown", changeDirection);
-
-function changeDirection(event) {
-    if(event.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
-    else if(event.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
-    else if(event.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
-    else if(event.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
+// Buttons control
+function setDir(dir){
+    if(dir==="LEFT" && direction!=="RIGHT") direction="LEFT";
+    if(dir==="UP" && direction!=="DOWN") direction="UP";
+    if(dir==="RIGHT" && direction!=="LEFT") direction="RIGHT";
+    if(dir==="DOWN" && direction!=="UP") direction="DOWN";
 }
 
-function draw() {
-    ctx.fillStyle = "#111";
-    ctx.fillRect(0,0,400,400);
+// Swipe control
+let startX, startY;
+canvas.addEventListener("touchstart", e=>{
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+});
 
-    // Snake
-    for(let i = 0; i < snake.length; i++) {
-        ctx.fillStyle = (i === 0) ? "lime" : "green";
-        ctx.fillRect(snake[i].x, snake[i].y, box, box);
+canvas.addEventListener("touchmove", e=>{
+    let dx = e.touches[0].clientX - startX;
+    let dy = e.touches[0].clientY - startY;
+
+    if(Math.abs(dx) > Math.abs(dy)){
+        if(dx > 0) setDir("RIGHT");
+        else setDir("LEFT");
+    } else {
+        if(dy > 0) setDir("DOWN");
+        else setDir("UP");
+    }
+});
+
+// Draw realistic snake
+function drawSnakePart(x,y,i){
+    ctx.fillStyle = i==0 ? "#00ff00" : "#007700";
+    ctx.beginPath();
+    ctx.arc(x+box/2,y+box/2,box/2,0,Math.PI*2);
+    ctx.fill();
+}
+
+// Draw apple
+function drawApple(x,y){
+    ctx.fillStyle = "red";
+    ctx.beginPath();
+    ctx.arc(x+box/2,y+box/2,box/2,0,Math.PI*2);
+    ctx.fill();
+
+    // leaf
+    ctx.fillStyle="green";
+    ctx.fillRect(x+box/2, y-3, 3,6);
+}
+
+function randomFood(){
+    return {
+        x: Math.floor(Math.random()*20)*box,
+        y: Math.floor(Math.random()*20)*box
+    };
+}
+
+function draw(){
+    ctx.fillStyle="#111";
+    ctx.fillRect(0,0,300,300);
+
+    // snake
+    for(let i=0;i<snake.length;i++){
+        drawSnakePart(snake[i].x,snake[i].y,i);
     }
 
-    // Food
-    ctx.fillStyle = "red";
-    ctx.fillRect(food.x, food.y, box, box);
+    // apple
+    drawApple(food.x,food.y);
 
-    // Move snake
     let headX = snake[0].x;
     let headY = snake[0].y;
 
-    if(direction === "LEFT") headX -= box;
-    if(direction === "UP") headY -= box;
-    if(direction === "RIGHT") headX += box;
-    if(direction === "DOWN") headY += box;
+    if(direction==="LEFT") headX -= box;
+    if(direction==="UP") headY -= box;
+    if(direction==="RIGHT") headX += box;
+    if(direction==="DOWN") headY += box;
 
-    // Eat food
-    if(headX === food.x && headY === food.y) {
+    // eat
+    if(headX===food.x && headY===food.y){
         score++;
-        food = {
-            x: Math.floor(Math.random()*20)*box,
-            y: Math.floor(Math.random()*20)*box
-        };
+        document.getElementById("score").innerText = score;
+        food = randomFood();
     } else {
         snake.pop();
     }
 
-    let newHead = {x: headX, y: headY};
+    let newHead = {x:headX,y:headY};
 
-    // Game over
-    if(
-        headX < 0 || headY < 0 ||
-        headX >= 400 || headY >= 400 ||
-        collision(newHead, snake)
-    ) {
+    // collision
+    if(headX<0 || headY<0 || headX>=300 || headY>=300 || collide(newHead)){
         clearInterval(game);
-        alert("Game Over 😢 Score: " + score);
+        alert("Game Over 😢 Score: "+score);
     }
 
     snake.unshift(newHead);
-
-    // Score
-    ctx.fillStyle = "white";
-    ctx.fillText("Score: " + score, 10, 20);
 }
 
-function collision(head, array) {
-    for(let i = 0; i < array.length; i++) {
-        if(head.x === array[i].x && head.y === array[i].y) {
+function collide(head){
+    for(let i=0;i<snake.length;i++){
+        if(head.x===snake[i].x && head.y===snake[i].y){
             return true;
         }
     }
     return false;
 }
 
-let game = setInterval(draw, 100);
+let game = setInterval(draw,120);
 </script>
 
 </body>
