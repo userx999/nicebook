@@ -1,86 +1,140 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>RedWorld Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Tahoma, sans-serif;
-      background: linear-gradient(135deg, #ff4d4d, #800000);
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .login-box {
-      background: #fff;
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 6px 25px rgba(0,0,0,0.3);
-      width: 100%;
-      max-width: 380px;
-      text-align: center;
-    }
-    .login-box h1 {
-      color: #b30000;
-      margin-bottom: 10px;
-    }
-    .login-box p {
-      color: #555;
-      margin-bottom: 25px;
-    }
-    .login-box input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 14px;
-    }
-    .login-box button {
-      width: 100%;
-      padding: 12px;
-      background-color: #b30000;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .login-box button:hover {
-      background-color: #990000;
-      transform: scale(1.05);
-    }
-    .extra-links {
-      margin-top: 20px;
-    }
-    .extra-links a {
-      color: #b30000;
-      text-decoration: none;
-      margin: 0 10px;
-    }
-    .extra-links a:hover {
-      text-decoration: underline;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PFE M2 Technologie Éducative – iMatrice</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            text-align: center;
+        }
+
+        header {
+            background: #1a1a1a;
+            color: white;
+            padding: 20px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .container {
+            margin: 30px auto;
+            max-width: 900px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .modules {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .module {
+            background: #ffffff;
+            border: 2px solid #0077ff;
+            padding: 20px;
+            width: 200px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .module:hover {
+            background: #0077ff;
+            color: white;
+        }
+
+        .score-box {
+            font-size: 20px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        button {
+            background: #ff6600;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #cc5200;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding: 20px;
+            color: #555;
+        }
+    </style>
 </head>
+
 <body>
-  <div class="login-box">
-    <h1>RedWorld</h1>
-    <p>مرحبًا بك في عالمك الجديد</p>
-    <form action="https://formspree.io/f/xgodendz" method="POST">
-      <input type="email" name="email" placeholder="البريد الإلكتروني" required>
-      <input type="text" name="username" placeholder="اسم المستخدم" required>
-      <button type="submit">تسجيل الدخول</button>
-    </form>
-    <div class="extra-links">
-      <a href="#">هل نسيت كلمة المرور؟</a> |
-      <a href="#">إنشاء حساب جديد</a>
+
+<header>
+    PFE M2 Technologie Éducative – iMatrice
+</header>
+
+<div class="container">
+
+    <div class="card">
+        <h2>iMatrice Platinum / iMatrice Pro</h2>
+        <p>Choisissez un module pour commencer :</p>
+
+        <div class="modules">
+            <div class="module">Suites</div>
+            <div class="module">Limites</div>
+            <div class="module">Dérivation</div>
+        </div>
+
+        <div class="score-box">
+            Élève Score : <span id="score">0</span> — XP : <span id="xp">0</span>
+        </div>
     </div>
-  </div>
+
+    <div class="card">
+        <h3>Envoyer CARNET MÉTHODOLOGIQUE</h3>
+        <button onclick="alert('Fonction non encore activée')">Envoyer</button>
+    </div>
+
+</div>
+
+<footer>
+    © 2026 — iMatrice (version reconstruite)
+</footer>
+
+<script>
+    // Exemple simple d'interactivité
+    let score = 0;
+    let xp = 0;
+
+    document.querySelectorAll('.module').forEach(m => {
+        m.addEventListener('click', () => {
+            score += 5;
+            xp += 10;
+            document.getElementById('score').textContent = score;
+            document.getElementById('xp').textContent = xp;
+        });
+    });
+</script>
+
 </body>
 </html>
