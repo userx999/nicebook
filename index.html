@@ -1,194 +1,136 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl" class="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Snake Ultra Smooth 🐍</title>
-
-<style>
-body{
-    margin:0;
-    background:black;
-    color:white;
-    text-align:center;
-    font-family:Arial;
-}
-
-canvas{
-    background:#111;
-    border:2px solid lime;
-    margin-top:10px;
-}
-
-.controls{
-    margin-top:10px;
-}
-
-.btn{
-    width:60px;
-    height:60px;
-    margin:5px;
-    font-size:20px;
-    background:#222;
-    color:lime;
-    border:none;
-    border-radius:10px;
-}
-
-a{
-    color:lime;
-    text-decoration:none;
-}
-
-.hiddenPage{
-    display:none;
-    margin-top:50px;
-    font-size:25px;
-}
-</style>
-</head>
-
-<body>
-
-<h2>🐍 Snake Ultra</h2>
-<p>Score: <span id="score">0</span></p>
-
-<p>
-Edited by 
-<a href="#" onclick="showSecret()">Adam Ababou</a>
-</p>
-
-<canvas id="game" width="300" height="300"></canvas>
-
-<div class="controls">
-    <div>
-        <button class="btn" onclick="setDir('UP')">⬆️</button>
-    </div>
-    <div>
-        <button class="btn" onclick="setDir('LEFT')">⬅️</button>
-        <button class="btn" onclick="setDir('DOWN')">⬇️</button>
-        <button class="btn" onclick="setDir('RIGHT')">➡️</button>
-    </div>
-</div>
-
-<!-- الصفحة المخفية -->
-<div id="secret" class="hiddenPage">
-    ❤️ marwa mounir i love you ❤️
-</div>
-
-<script>
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-
-const box = 15;
-let snake = [{x:150,y:150}];
-let direction = "RIGHT";
-let food = randomFood();
-let score = 0;
-
-// smooth timing
-let lastTime = 0;
-let speed = 100; // كلما نقص زادت السرعة
-
-function setDir(dir){
-    if(dir==="LEFT" && direction!=="RIGHT") direction="LEFT";
-    if(dir==="UP" && direction!=="DOWN") direction="UP";
-    if(dir==="RIGHT" && direction!=="LEFT") direction="RIGHT";
-    if(dir==="DOWN" && direction!=="UP") direction="DOWN";
-}
-
-function randomFood(){
-    return {
-        x: Math.floor(Math.random()*20)*box,
-        y: Math.floor(Math.random()*20)*box
-    };
-}
-
-function gameLoop(time){
-    if(time - lastTime > speed){
-        update();
-        lastTime = time;
-    }
-    requestAnimationFrame(gameLoop);
-}
-
-function update(){
-    ctx.fillStyle="#111";
-    ctx.fillRect(0,0,300,300);
-
-    // snake
-    for(let i=0;i<snake.length;i++){
-        ctx.fillStyle = i==0 ? "lime" : "green";
-        ctx.fillRect(snake[i].x,snake[i].y,box,box);
-    }
-
-    // apple
-    ctx.fillStyle="red";
-    ctx.fillRect(food.x,food.y,box,box);
-
-    let headX = snake[0].x;
-    let headY = snake[0].y;
-
-    if(direction==="LEFT") headX -= box;
-    if(direction==="UP") headY -= box;
-    if(direction==="RIGHT") headX += box;
-    if(direction==="DOWN") headY += box;
-
-    // teleport edges
-    if(headX < 0) headX = 300 - box;
-    if(headY < 0) headY = 300 - box;
-    if(headX >= 300) headX = 0;
-    if(headY >= 300) headY = 0;
-
-    // eat
-    if(headX===food.x && headY===food.y){
-        score++;
-        document.getElementById("score").innerText = score;
-        food = randomFood();
-    } else {
-        snake.pop();
-    }
-
-    let newHead = {x:headX,y:headY};
-
-    // collide
-    for(let i=0;i<snake.length;i++){
-        if(newHead.x===snake[i].x && newHead.y===snake[i].y){
-            alert("Game Over 😢 Score: "+score);
-            location.reload();
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ألعاب آدم - منصة الألعاب الاحترافية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* إضافة لمسة زجاجية للخلفية */
+        .glass-effect {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-    }
+        /* أنيميشن خفيفة للبطاقات */
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+        body {
+            background-color: #0b0f1a;
+            color: white;
+        }
+    </style>
+</head>
+<body class="font-sans">
 
-    snake.unshift(newHead);
-}
+    <nav class="fixed top-0 w-full z-50 glass-effect px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <i data-lucide="gamepad-2" class="text-blue-500 w-8 h-8"></i>
+            <span class="font-bold text-xl tracking-tighter">ADAM<span class="text-blue-500">GAMES</span></span>
+        </div>
+        <div class="hidden md:flex gap-6 text-sm font-medium">
+            <a href="#" class="hover:text-blue-500 transition">الرئيسية</a>
+            <a href="#games" class="hover:text-blue-500 transition">الألعاب</a>
+            <a href="#" class="hover:text-blue-500 transition">المتصدرين</a>
+        </div>
+        <button class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm font-bold transition">
+            دخول
+        </button>
+    </nav>
 
-// secret page
-function showSecret(){
-    document.getElementById("secret").style.display = "block";
-}
+    <section class="mt-20 pt-16 pb-10 px-6 text-center">
+        <h1 class="text-4xl md:text-6xl font-extrabold mb-4 animate__animated animate__fadeInDown">
+            عالم الألعاب <span class="text-blue-500">بين يديك</span>
+        </h1>
+        <p class="text-gray-400 max-w-md mx-auto mb-8 animate__animated animate__fadeInUp">
+            استمتع بأفضل الألعاب الكلاسيكية والحديثة مباشرة من متصفحك، بدون تحميل، وبأداء صاروخي.
+        </p>
+        <div class="flex justify-center gap-4 animate__animated animate__zoomIn">
+            <a href="#games" class="bg-blue-600 px-8 py-3 rounded-full font-bold shadow-lg shadow-blue-900/20">ابدأ اللعب</a>
+            <a href="#" class="border border-gray-700 px-8 py-3 rounded-full font-bold hover:bg-gray-800 transition">استكشف</a>
+        </div>
+    </section>
 
-// swipe
-let startX, startY;
-canvas.addEventListener("touchstart", e=>{
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-});
+    <section id="games" class="px-6 py-12">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-bold border-r-4 border-blue-600 pr-3">الأكثر لعباً</h2>
+            <span class="text-blue-500 text-sm">رؤية الكل</span>
+        </div>
 
-canvas.addEventListener("touchmove", e=>{
-    let dx = e.touches[0].clientX - startX;
-    let dy = e.touches[0].clientY - startY;
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <div class="game-card bg-gray-900 rounded-2xl overflow-hidden transition-all duration-300">
+                <div class="h-48 bg-gradient-to-br from-green-500 to-green-800 flex items-center justify-center">
+                    <i data-lucide="sprout" class="w-20 h-20 text-white opacity-50"></i>
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-1">الثعبان والتفاحة</h3>
+                    <p class="text-gray-400 text-xs mb-4">اللعبة الكلاسيكية الشهيرة بتصميم عصري.</p>
+                    <button class="w-full bg-gray-800 hover:bg-blue-600 py-2 rounded-xl text-sm font-bold transition">العب الآن</button>
+                </div>
+            </div>
 
-    if(Math.abs(dx) > Math.abs(dy)){
-        if(dx > 0) setDir("RIGHT");
-        else setDir("LEFT");
-    } else {
-        if(dy > 0) setDir("DOWN");
-        else setDir("UP");
-    }
-});
+            <div class="game-card bg-gray-900 rounded-2xl overflow-hidden transition-all duration-300">
+                <div class="h-48 bg-gradient-to-br from-purple-500 to-indigo-800 flex items-center justify-center">
+                    <i data-lucide="layout-grid" class="w-20 h-20 text-white opacity-50"></i>
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-1">Block Blast</h3>
+                    <p class="text-gray-400 text-xs mb-4">فجر الكتل الملونة وحقق أعلى سكور.</p>
+                    <button class="w-full bg-gray-800 hover:bg-blue-600 py-2 rounded-xl text-sm font-bold transition">العب الآن</button>
+                </div>
+            </div>
 
-requestAnimationFrame(gameLoop);
-</script>
+            <div class="game-card bg-gray-900 rounded-2xl overflow-hidden transition-all duration-300">
+                <div class="h-48 bg-gradient-to-br from-yellow-500 to-orange-700 flex items-center justify-center">
+                    <i data-lucide="zap" class="w-20 h-20 text-white opacity-50"></i>
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-1">Dino Chrome</h3>
+                    <p class="text-gray-400 text-xs mb-4">اركض، اقفز، وتجاوز الصبار في الصحراء.</p>
+                    <button class="w-full bg-gray-800 hover:bg-blue-600 py-2 rounded-xl text-sm font-bold transition">العب الآن</button>
+                </div>
+            </div>
 
+            <div class="game-card bg-gray-900 rounded-2xl overflow-hidden transition-all duration-300">
+                <div class="h-48 bg-gradient-to-br from-blue-500 to-blue-900 flex items-center justify-center">
+                    <i data-lucide="trophy" class="w-20 h-20 text-white opacity-50"></i>
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-1">كرة القدم 2026</h3>
+                    <p class="text-gray-400 text-xs mb-4">سجل الأهداف وقد فريقك نحو الفوز.</p>
+                    <button class="w-full bg-gray-800 hover:bg-blue-600 py-2 rounded-xl text-sm font-bold transition">العب الآن</button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="bg-gray-950 border-t border-gray-900 pt-10 pb-6 px-6">
+        <div class="text-center mb-8">
+            <div class="flex justify-center items-center gap-2 mb-4">
+                <i data-lucide="gamepad-2" class="text-blue-500 w-6 h-6"></i>
+                <span class="font-bold text-lg">ADAM GAMES</span>
+            </div>
+            <p class="text-gray-500 text-sm italic">"أفضل تجربة لعب لمستخدمي الهواتف في العالم العربي"</p>
+        </div>
+        <div class="flex justify-center gap-6 mb-8">
+            <a href="#" class="text-gray-400 hover:text-white"><i data-lucide="instagram"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white"><i data-lucide="twitter"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white"><i data-lucide="facebook"></i></a>
+        </div>
+        <div class="text-center text-gray-700 text-xs border-t border-gray-900 pt-6">
+            &copy; 2026 جميع الحقوق محفوظة لآدم.
+        </div>
+    </footer>
+
+    <script>
+        // تشغيل الأيقونات
+        lucide.createIcons();
+    </script>
 </body>
 </html>
