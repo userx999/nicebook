@@ -3,139 +3,221 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ADAM ARCADE FINAL</title>
+    <title>ADAM HUB | For Marwa</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        html, body { overscroll-behavior: none; background: #020617; height: 100%; overflow: hidden; touch-action: none; }
-        .grid-bg { background: #1e293b; padding: 6px; border-radius: 12px; display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; width: 320px; height: 320px; }
-        .cell { background: #0f172a; border-radius: 4px; transition: 0.2s; }
-        .cell.filled { background: #3b82f6; border: 1px solid #60a5fa; box-shadow: inset 0 0 8px rgba(0,0,0,0.5); }
-        .piece-opt { width: 70px; height: 70px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 5px; border-radius: 8px; border: 2px solid transparent; }
-        .piece-opt.selected { border-color: #3b82f6; background: rgba(59, 130, 246, 0.2); }
-        .p-cell { aspect-ratio: 1; border-radius: 2px; }
-        canvas { border: 4px solid #1e293b; border-radius: 15px; background: #000; width: 300px; height: 300px; }
-        .btn-ctrl { background: #1e293b; width: 65px; height: 65px; border-radius: 20px; display: flex; align-items: center; justify-content: center; }
-        .btn-ctrl:active { background: #3b82f6; }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Noto+Sans+Arabic:wght@400;900&display=swap');
+        
+        :root { --primary: #00f2ff; --secondary: #ff007a; --bg: #050505; }
+        
+        body { 
+            background-color: var(--bg); 
+            color: white; 
+            font-family: 'Noto Sans Arabic', sans-serif;
+            overflow: hidden; 
+            touch-action: none;
+            overscroll-behavior: none;
+        }
+
+        .cyber-card {
+            background: linear-gradient(145deg, #0f172a, #020617);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+            transition: 0.3s;
+        }
+
+        .game-canvas {
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+            background: #000;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .btn-action {
+            background: linear-gradient(90deg, var(--primary), #0081ff);
+            color: black;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* الإهداء */
+        .dedication {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            color: var(--secondary);
+            text-shadow: 0 0 5px var(--secondary);
+        }
+
+        .hidden { display: none; }
     </style>
 </head>
-<body class="text-white">
+<body>
 
-    <header class="fixed top-0 w-full z-50 bg-slate-900/80 backdrop-blur-md px-6 py-4 flex justify-between items-center">
-        <h1 class="font-black text-blue-500 italic uppercase">Adam System v4</h1>
-    </header>
-
-    <main class="h-full flex flex-col justify-center gap-6 px-10">
-        <button onclick="show('s-modal')" class="w-full py-6 bg-emerald-600 rounded-2xl font-bold italic">SNAKE GAME</button>
-        <button onclick="show('b-modal')" class="w-full py-6 bg-blue-600 rounded-2xl font-bold italic">BLOCK BLAST PRO</button>
-    </main>
-
-    <div id="s-modal" class="fixed inset-0 z-[100] bg-slate-950 hidden flex flex-col items-center pt-20">
-        <div class="w-72 flex justify-between mb-4 font-black text-emerald-500">
-            <span>SCORE: <span id="s-score">0</span></span>
-            <button onclick="hideAll()"><i data-lucide="x"></i></button>
+    <div id="menu" class="h-full flex flex-col items-center justify-center p-6 text-center">
+        <div class="mb-8">
+            <h1 class="text-4xl font-black mb-2 italic tracking-tighter" style="color: var(--primary);">ADAM<span class="text-white">HUB</span></h1>
+            <p class="dedication animate-pulse italic">HAD SITE LIK A MARWAA ❤️</p>
         </div>
-        <canvas id="s-canvas" width="400" height="400"></canvas>
-        <div class="grid grid-cols-3 gap-4 mt-8">
-            <div></div>
-            <button onclick="setDir(0,-1)" class="btn-ctrl"><i data-lucide="chevron-up"></i></button>
-            <div></div>
-            <button onclick="setDir(-1,0)" class="btn-ctrl"><i data-lucide="chevron-left"></i></button>
-            <button onclick="initSnake()" class="bg-red-600/20 text-red-500 w-16 h-16 rounded-full border border-red-600/50 text-[10px] font-bold">RESET</button>
-            <button onclick="setDir(1,0)" class="btn-ctrl"><i data-lucide="chevron-right"></i></button>
-            <div></div>
-            <button onclick="setDir(0,1)" class="btn-ctrl"><i data-lucide="chevron-down"></i></button>
-            <div></div>
+
+        <div class="grid grid-cols-1 gap-6 w-full max-w-sm">
+            <button onclick="startSnake()" class="cyber-card p-6 rounded-2xl flex items-center gap-4 active:scale-95">
+                <div class="p-3 bg-emerald-500/20 rounded-xl text-emerald-400"><i data-lucide="snake"></i></div>
+                <div class="text-right">
+                    <div class="font-bold">Snake Neon</div>
+                    <div class="text-[10px] opacity-50">تحكم باللمس (Swipe)</div>
+                </div>
+            </button>
+
+            <button onclick="startBlocks()" class="cyber-card p-6 rounded-2xl flex items-center gap-4 active:scale-95">
+                <div class="p-3 bg-blue-500/20 rounded-xl text-blue-400"><i data-lucide="layout-grid"></i></div>
+                <div class="text-right">
+                    <div class="font-bold">Block Master</div>
+                    <div class="text-[10px] opacity-50">اضغط للاختيار ثم الوضع</div>
+                </div>
+            </button>
         </div>
+
+        <footer class="fixed bottom-6 text-[10px] opacity-30 font-mono italic">
+            EDITED BY ADAM ABABOU | 1BACSE-6
+        </footer>
     </div>
 
-    <div id="b-modal" class="fixed inset-0 z-[100] bg-slate-950 hidden flex flex-col items-center pt-16">
-        <div class="w-80 flex justify-between mb-4 font-black text-blue-500">
-            <span>SCORE: <span id="b-score">0</span></span>
-            <button onclick="hideAll()"><i data-lucide="x"></i></button>
+    <div id="snake-view" class="fixed inset-0 bg-black hidden flex-col items-center pt-20 px-6">
+        <div class="w-full max-w-xs flex justify-between mb-6">
+            <div class="text-emerald-400 font-bold uppercase">Points: <span id="s-score">0</span></div>
+            <button onclick="goHome()" class="text-white/40"><i data-lucide="home"></i></button>
         </div>
-        <div id="grid" class="grid-bg"></div>
-        <div id="pieces" class="mt-8 flex gap-4 h-24 items-center"></div>
-        <button onclick="genPieces()" class="mt-8 text-xs font-bold text-blue-400 border border-blue-500/30 px-6 py-2 rounded-full">تحديث القطع</button>
+        <canvas id="snake-canvas" class="game-canvas" width="400" height="400"></canvas>
+        <div class="mt-10 text-emerald-500/50 text-[10px] uppercase tracking-widest font-bold">Swipe to Move</div>
+    </div>
+
+    <div id="blocks-view" class="fixed inset-0 bg-black hidden flex flex-col items-center pt-16 px-6">
+        <div class="w-full max-w-xs flex justify-between mb-4">
+            <div class="text-blue-400 font-bold uppercase">Level: <span id="b-score">0</span></div>
+            <button onclick="goHome()" class="text-white/40"><i data-lucide="home"></i></button>
+        </div>
+        
+        <div id="grid-container" class="grid grid-cols-8 gap-1 p-2 bg-slate-900 rounded-xl border border-blue-500/30 w-full max-w-[320px] aspect-square"></div>
+        
+        <div id="options-container" class="mt-8 flex gap-6 h-20 items-center"></div>
+        
+        <button onclick="setupBlocks()" class="mt-6 text-[10px] text-blue-400 border border-blue-500/20 px-4 py-2 rounded-full uppercase font-black">Refresh Pieces</button>
     </div>
 
     <script>
         lucide.createIcons();
-        function show(id){ document.getElementById(id).classList.remove('hidden'); if(id==='s-modal') initSnake(); if(id==='b-modal') initBlocks(); }
-        function hideAll(){ document.querySelectorAll('[id$="-modal"]').forEach(m=>m.classList.add('hidden')); clearInterval(sLoop); }
 
-        // --- SNAKE (FIXED) ---
-        let snk, food, dir, scr, sLoop;
-        const sCan = document.getElementById('s-canvas'), sx = sCan.getContext('2d');
-
-        function initSnake(){
-            clearInterval(sLoop); snk=[{x:10,y:10}]; food={x:15,y:5}; dir={x:1,y:0}; scr=0;
-            document.getElementById('s-score').innerText=scr;
-            sLoop = setInterval(drawS, 130);
+        function goHome() {
+            document.querySelectorAll('div[id$="-view"]').forEach(v => v.classList.add('hidden'));
+            document.getElementById('menu').classList.remove('hidden');
+            clearInterval(gameLoop);
         }
-        function setDir(x,y){ if(x !== -dir.x || y !== -dir.y) dir={x,y}; }
-        function drawS(){
-            let head = {x: snk[0].x+dir.x, y: snk[0].y+dir.y};
+
+        // --- SNAKE ENGINE (SWIPE) ---
+        let snk, fd, dr, sc, gameLoop;
+        const sCanvas = document.getElementById('snake-canvas'), sCtx = sCanvas.getContext('2d');
+
+        function startSnake() {
+            document.getElementById('menu').classList.add('hidden');
+            document.getElementById('snake-view').classList.remove('hidden');
+            snk = [{x:10, y:10}]; fd = {x:5, y:5}; dr = {x:1, y:0}; sc = 0;
+            gameLoop = setInterval(updateSnake, 130);
+            initSwipe();
+        }
+
+        function updateSnake() {
+            let head = {x: snk[0].x + dr.x, y: snk[0].y + dr.y};
             if(head.x<0)head.x=19; if(head.x>19)head.x=0; if(head.y<0)head.y=19; if(head.y>19)head.y=0;
-            if(snk.some(s=>s.x===head.x && s.y===head.y)) return initSnake();
+            if(snk.some(s => s.x === head.x && s.y === head.y)) return startSnake();
             snk.unshift(head);
-            if(head.x===food.x && head.y===food.y){ scr+=10; document.getElementById('s-score').innerText=scr; food={x:Math.floor(Math.random()*20),y:Math.floor(Math.random()*20)}; }
-            else snk.pop();
-            sx.fillStyle="black"; sx.fillRect(0,0,400,400);
-            sx.fillStyle="#10b981"; snk.forEach(s=>sx.fillRect(s.x*20,s.y*20,18,18));
-            sx.fillStyle="#ef4444"; sx.fillRect(food.x*20,food.y*20,18,18);
+            if(head.x === fd.x && head.y === fd.y) {
+                sc+=10; document.getElementById('s-score').innerText = sc;
+                fd = {x: Math.floor(Math.random()*20), y: Math.floor(Math.random()*20)};
+            } else snk.pop();
+
+            sCtx.fillStyle = "#000"; sCtx.fillRect(0,0,400,400);
+            sCtx.fillStyle = "#10b981"; snk.forEach(s => sCtx.fillRect(s.x*20, s.y*20, 18, 18));
+            sCtx.fillStyle = "#ff007a"; sCtx.fillRect(fd.x*20, fd.y*20, 18, 18);
         }
 
-        // --- BLOCK BLAST (CLICK TO PLACE - PERFECT FOR MOBILE) ---
-        let board=Array(64).fill(0), bScr=0, selP=null;
-        const SHAPES = [
-            [[1,1],[1,1]], [[1,1,1]], [[1,1],[0,1]], [[1]], [[1,1]], [[1,0],[1,1]], [[1,1,1],[0,1,0]]
-        ];
+        function initSwipe() {
+            let startX, startY;
+            document.addEventListener('touchstart', e => { startX = e.touches[0].clientX; startY = e.touches[0].clientY; }, {passive: false});
+            document.addEventListener('touchmove', e => {
+                if(!startX || !startY) return;
+                let dx = e.touches[0].clientX - startX, dy = e.touches[0].clientY - startY;
+                if(Math.abs(dx) > Math.abs(dy)) {
+                    if(dx > 30 && dr.x === 0) dr = {x:1, y:0};
+                    else if(dx < -30 && dr.x === 0) dr = {x:-1, y:0};
+                } else {
+                    if(dy > 30 && dr.y === 0) dr = {x:0, y:1};
+                    else if(dy < -30 && dr.y === 0) dr = {x:0, y:-1};
+                }
+                startX = null; startY = null;
+            }, {passive: false});
+        }
 
-        function initBlocks(){ board.fill(0); bScr=0; document.getElementById('b-score').innerText=bScr; renderG(); genPieces(); }
-        function renderG(){
-            const g=document.getElementById('grid'); g.innerHTML='';
-            board.forEach((v,i)=>{
-                const c=document.createElement('div');
-                c.className=`cell ${v?'filled':''}`;
-                c.onclick=()=>placeP(i);
-                g.appendChild(c);
+        // --- BLOCK ENGINE (CLICK SELECT) ---
+        let bBoard = Array(64).fill(0), bScore = 0, selectedShape = null;
+        const SHAPES = [ [[1,1],[1,1]], [[1,1,1]], [[1,1],[0,1]], [[1]], [[1,0],[1,1]], [[1,1,1],[0,1,0]], [[1,1]] ];
+
+        function startBlocks() {
+            document.getElementById('menu').classList.add('hidden');
+            document.getElementById('blocks-view').classList.remove('hidden');
+            bBoard.fill(0); bScore = 0; document.getElementById('b-score').innerText = bScore;
+            renderBoard(); setupBlocks();
+        }
+
+        function renderBoard() {
+            const container = document.getElementById('grid-container'); container.innerHTML = '';
+            bBoard.forEach((val, i) => {
+                let cell = document.createElement('div');
+                cell.className = `w-full h-full rounded-sm ${val ? 'bg-blue-500 shadow-[0_0_8px_#3b82f6]' : 'bg-slate-800'}`;
+                cell.onclick = () => placeShape(i);
+                container.appendChild(cell);
             });
         }
-        function genPieces(){
-            selP=null; const pArea=document.getElementById('pieces'); pArea.innerHTML='';
-            for(let i=0; i<3; i++){
-                let p = SHAPES[Math.floor(Math.random()*SHAPES.length)];
-                let div = document.createElement('div'); div.className="piece-opt";
-                div.onclick=()=>{ document.querySelectorAll('.piece-opt').forEach(el=>el.classList.remove('selected')); div.classList.add('selected'); selP=p; };
-                for(let r=0;r<3;r++){
-                    for(let c=0;c<3;c++){
-                        let cl=document.createElement('div'); cl.className="p-cell "+(p[r]&&p[r][c]?"bg-blue-500":"bg-transparent");
-                        div.appendChild(cl);
-                    }
+
+        function setupBlocks() {
+            selectedShape = null; const optArea = document.getElementById('options-container'); optArea.innerHTML = '';
+            for(let i=0; i<3; i++) {
+                let shape = SHAPES[Math.floor(Math.random()*SHAPES.length)];
+                let div = document.createElement('div'); div.className = "grid grid-cols-3 gap-1 p-2 bg-white/5 rounded-lg border border-transparent";
+                div.onclick = () => { 
+                    document.querySelectorAll('#options-container > div').forEach(d => d.style.borderColor = 'transparent');
+                    div.style.borderColor = '#00f2ff'; selectedShape = shape; 
+                };
+                for(let r=0; r<3; r++) for(let c=0; c<3; c++) {
+                    let dot = document.createElement('div'); dot.className = `w-3 h-3 rounded-[2px] ${shape[r] && shape[r][c] ? 'bg-blue-400' : 'bg-transparent'}`;
+                    div.appendChild(dot);
                 }
-                pArea.appendChild(div);
+                optArea.appendChild(div);
             }
         }
-        function placeP(i){
-            if(!selP) return alert('اختار قطعة أولاً!');
-            let r=Math.floor(i/8), c=i%8, can=true;
-            selP.forEach((row,ri)=>row.forEach((v,ci)=>{
-                if(v){ let tr=r+ri, tc=c+ci; if(tr>7||tc>7||board[tr*8+tc]) can=false; }
+
+        function placeShape(idx) {
+            if(!selectedShape) return;
+            let r = Math.floor(idx/8), c = idx%8, can = true;
+            selectedShape.forEach((row, ri) => row.forEach((v, ci) => {
+                if(v) { let tr=r+ri, tc=c+ci; if(tr>7 || tc>7 || bBoard[tr*8+tc]) can = false; }
             }));
-            if(can){
-                selP.forEach((row,ri)=>row.forEach((v,ci)=>{ if(v) board[(r+ri)*8+(c+ci)]=1; }));
-                bScr+=20; checkLines(); renderG(); selP=null; 
-                document.querySelector('.selected').style.opacity="0"; 
-                document.querySelector('.selected').classList.remove('selected');
-                document.getElementById('b-score').innerText=bScr;
-                if(Array.from(document.getElementById('pieces').children).every(child => child.style.opacity === "0")) genPieces();
+            if(can) {
+                selectedShape.forEach((row, ri) => row.forEach((v, ci) => { if(v) bBoard[(r+ri)*8+(c+ci)] = 1; }));
+                bScore += 10; checkLines(); renderBoard(); selectedShape = null;
+                // إزالة القطعة المستخدمة
+                setupBlocks();
+                document.getElementById('b-score').innerText = bScore;
             }
         }
-        function checkLines(){
-            for(let i=0;i<8;i++){
-                let r=board.slice(i*8,(i+1)*8); if(r.every(v=>v===1)){ for(let j=0;j<8;j++)board[i*8+j]=0; bScr+=100; }
-                let col=[]; for(let j=0;j<8;j++)col.push(board[j*8+i]); if(col.every(v=>v===1)){ for(let j=0;j<8;j++)board[j*8+i]=0; bScr+=100; }
+
+        function checkLines() {
+            for(let i=0; i<8; i++) {
+                let row = bBoard.slice(i*8, (i+1)*8); if(row.every(v => v === 1)) { for(let j=0; j<8; j++) bBoard[i*8+j]=0; bScore+=100; }
+                let col = []; for(let j=0; j<8; j++) col.push(bBoard[j*8+i]); if(col.every(v => v === 1)) { for(let j=0; j<8; j++) bBoard[j*8+i]=0; bScore+=100; }
             }
         }
     </script>
