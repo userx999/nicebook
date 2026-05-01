@@ -2,27 +2,15 @@
 <html lang="ar" dir="rtl" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ألعاب آدم - منصة الألعاب الاحترافية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ألعاب آدم - Snake Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* إضافة لمسة زجاجية للخلفية */
-        .glass-effect {
-            background: rgba(17, 24, 39, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        /* أنيميشن خفيفة للبطاقات */
-        .game-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
-        }
-        body {
-            background-color: #0b0f1a;
-            color: white;
-        }
+        .glass-effect { background: rgba(17, 24, 39, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        body { background-color: #0b0f1a; color: white; touch-action: none; } /* منع السكرول فاش نلعبو */
+        #game-canvas { border: 2px solid #3b82f6; background: #000; display: block; margin: 0 auto; max-width: 100%; height: auto; }
+        .hidden { display: none; }
     </style>
 </head>
 <body class="font-sans">
@@ -30,107 +18,158 @@
     <nav class="fixed top-0 w-full z-50 glass-effect px-4 py-3 flex justify-between items-center">
         <div class="flex items-center gap-2">
             <i data-lucide="gamepad-2" class="text-blue-500 w-8 h-8"></i>
-            <span class="font-bold text-xl tracking-tighter">ADAM<span class="text-blue-500">GAMES</span></span>
+            <span class="font-bold text-xl uppercase">Adam<span class="text-blue-500">Games</span></span>
         </div>
-        <div class="hidden md:flex gap-6 text-sm font-medium">
-            <a href="#" class="hover:text-blue-500 transition">الرئيسية</a>
-            <a href="#games" class="hover:text-blue-500 transition">الألعاب</a>
-            <a href="#" class="hover:text-blue-500 transition">المتصدرين</a>
-        </div>
-        <button class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm font-bold transition">
-            دخول
-        </button>
+        <div class="text-xs font-mono bg-blue-600/20 px-2 py-1 rounded">1BACSE-6</div>
     </nav>
 
-    <section class="mt-20 pt-16 pb-10 px-6 text-center">
-        <h1 class="text-4xl md:text-6xl font-extrabold mb-4 animate__animated animate__fadeInDown">
-            عالم الألعاب <span class="text-blue-500">بين يديك</span>
-        </h1>
-        <p class="text-gray-400 max-w-md mx-auto mb-8 animate__animated animate__fadeInUp">
-            استمتع بأفضل الألعاب الكلاسيكية والحديثة مباشرة من متصفحك، بدون تحميل، وبأداء صاروخي.
-        </p>
-        <div class="flex justify-center gap-4 animate__animated animate__zoomIn">
-            <a href="#games" class="bg-blue-600 px-8 py-3 rounded-full font-bold shadow-lg shadow-blue-900/20">ابدأ اللعب</a>
-            <a href="#" class="border border-gray-700 px-8 py-3 rounded-full font-bold hover:bg-gray-800 transition">استكشف</a>
-        </div>
+    <section class="mt-24 px-6 text-center">
+        <h1 class="text-3xl font-black mb-2">ألعاب الهاكر <span class="text-blue-500">آدم</span></h1>
+        <p class="text-gray-400 text-sm mb-6">اضغط على اللعبة وجرب مهاراتك</p>
     </section>
 
-    <section id="games" class="px-6 py-12">
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="text-2xl font-bold border-r-4 border-blue-600 pr-3">الأكثر لعباً</h2>
-            <span class="text-blue-500 text-sm">رؤية الكل</span>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <main class="px-6 pb-20">
+        <div class="grid grid-cols-1 gap-6">
             
-            <div class="game-card bg-gray-900 rounded-2xl overflow-hidden transition-all duration-300">
-                <div class="h-48 bg-gradient-to-br from-green-500 to-green-800 flex items-center justify-center">
-                    <i data-lucide="sprout" class="w-20 h-20 text-white opacity-50"></i>
+            <div class="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800">
+                <div class="h-40 bg-gradient-to-br from-green-500 to-green-900 flex items-center justify-center">
+                    <i data-lucide="snake" class="w-16 h-16 text-white/50"></i>
                 </div>
                 <div class="p-5">
-                    <h3 class="font-bold text-lg mb-1">الثعبان والتفاحة</h3>
-                    <p class="text-gray-400 text-xs mb-4">اللعبة الكلاسيكية الشهيرة بتصميم عصري.</p>
-                    <button class="w-full bg-gray-800 hover:bg-blue-600 py-2 rounded-xl text-sm font-bold transition">العب الآن</button>
-                </div>
-            </div>
-
-            <div class="game-card bg-gray-900 rounded-2xl overflow-hidden transition-all duration-300">
-                <div class="h-48 bg-gradient-to-br from-purple-500 to-indigo-800 flex items-center justify-center">
-                    <i data-lucide="layout-grid" class="w-20 h-20 text-white opacity-50"></i>
-                </div>
-                <div class="p-5">
-                    <h3 class="font-bold text-lg mb-1">Block Blast</h3>
-                    <p class="text-gray-400 text-xs mb-4">فجر الكتل الملونة وحقق أعلى سكور.</p>
-                    <button class="w-full bg-gray-800 hover:bg-blue-600 py-2 rounded-xl text-sm font-bold transition">العب الآن</button>
-                </div>
-            </div>
-
-            <div class="game-card bg-gray-900 rounded-2xl overflow-hidden transition-all duration-300">
-                <div class="h-48 bg-gradient-to-br from-yellow-500 to-orange-700 flex items-center justify-center">
-                    <i data-lucide="zap" class="w-20 h-20 text-white opacity-50"></i>
-                </div>
-                <div class="p-5">
-                    <h3 class="font-bold text-lg mb-1">Dino Chrome</h3>
-                    <p class="text-gray-400 text-xs mb-4">اركض، اقفز، وتجاوز الصبار في الصحراء.</p>
-                    <button class="w-full bg-gray-800 hover:bg-blue-600 py-2 rounded-xl text-sm font-bold transition">العب الآن</button>
-                </div>
-            </div>
-
-            <div class="game-card bg-gray-900 rounded-2xl overflow-hidden transition-all duration-300">
-                <div class="h-48 bg-gradient-to-br from-blue-500 to-blue-900 flex items-center justify-center">
-                    <i data-lucide="trophy" class="w-20 h-20 text-white opacity-50"></i>
-                </div>
-                <div class="p-5">
-                    <h3 class="font-bold text-lg mb-1">كرة القدم 2026</h3>
-                    <p class="text-gray-400 text-xs mb-4">سجل الأهداف وقد فريقك نحو الفوز.</p>
-                    <button class="w-full bg-gray-800 hover:bg-blue-600 py-2 rounded-xl text-sm font-bold transition">العب الآن</button>
+                    <h3 class="font-bold text-lg">الثعبان والتفاحة</h3>
+                    <p class="text-gray-400 text-xs mb-4 italic">"ااا لقحبة كون كان طول رجلة كاعما جمل يتحنى"</p>
+                    <button onclick="openGame()" class="w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-xl font-bold transition shadow-lg shadow-blue-900/40">
+                        العب الآن
+                    </button>
                 </div>
             </div>
 
         </div>
-    </section>
+    </main>
 
-    <footer class="bg-gray-950 border-t border-gray-900 pt-10 pb-6 px-6">
-        <div class="text-center mb-8">
-            <div class="flex justify-center items-center gap-2 mb-4">
-                <i data-lucide="gamepad-2" class="text-blue-500 w-6 h-6"></i>
-                <span class="font-bold text-lg">ADAM GAMES</span>
+    <div id="game-modal" class="fixed inset-0 z-[100] bg-black/95 hidden flex-col items-center justify-center p-4">
+        <div class="w-full max-w-sm">
+            <div class="flex justify-between items-center mb-4">
+                <div class="text-blue-500 font-bold">SCORE: <span id="score">0</span></div>
+                <button onclick="closeGame()" class="bg-red-500/20 text-red-500 p-2 rounded-full"><i data-lucide="x"></i></button>
             </div>
-            <p class="text-gray-500 text-sm italic">"أفضل تجربة لعب لمستخدمي الهواتف في العالم العربي"</p>
+            
+            <canvas id="game-canvas" width="400" height="400"></canvas>
+            
+            <div class="mt-6 text-center text-gray-500 text-xs">
+                استخدم السحب (Swipe) للتحكم في الثعبان
+            </div>
         </div>
-        <div class="flex justify-center gap-6 mb-8">
-            <a href="#" class="text-gray-400 hover:text-white"><i data-lucide="instagram"></i></a>
-            <a href="#" class="text-gray-400 hover:text-white"><i data-lucide="twitter"></i></a>
-            <a href="#" class="text-gray-400 hover:text-white"><i data-lucide="facebook"></i></a>
-        </div>
-        <div class="text-center text-gray-700 text-xs border-t border-gray-900 pt-6">
-            &copy; 2026 جميع الحقوق محفوظة لآدم.
-        </div>
-    </footer>
+    </div>
 
     <script>
-        // تشغيل الأيقونات
         lucide.createIcons();
+
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const modal = document.getElementById('game-modal');
+        
+        let score = 0;
+        let snake = [{x: 10, y: 10}];
+        let food = {x: 15, y: 15};
+        let dx = 0;
+        let dy = 0;
+        let gridSize = 20;
+        let tileCount = 20;
+        let gameLoop;
+
+        function openGame() {
+            modal.classList.remove('hidden');
+            resetGame();
+            gameLoop = setInterval(draw, 100);
+        }
+
+        function closeGame() {
+            modal.classList.add('hidden');
+            clearInterval(gameLoop);
+        }
+
+        function resetGame() {
+            score = 0;
+            scoreElement.innerText = score;
+            snake = [{x: 10, y: 10}];
+            dx = 1; dy = 0;
+            spawnFood();
+        }
+
+        function spawnFood() {
+            food.x = Math.floor(Math.random() * tileCount);
+            food.y = Math.floor(Math.random() * tileCount);
+        }
+
+        function draw() {
+            // تحريك الثعبان
+            const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+            
+            // اصطدام بالحائط (Wall Wrap)
+            if (head.x < 0) head.x = tileCount - 1;
+            if (head.x >= tileCount) head.x = 0;
+            if (head.y < 0) head.y = tileCount - 1;
+            if (head.y >= tileCount) head.y = 0;
+
+            // اصطدام بالذات
+            if (snake.some((seg, index) => index !== 0 && seg.x === head.x && seg.y === head.y)) {
+                alert("Game Over! Score: " + score);
+                resetGame();
+                return;
+            }
+
+            snake.unshift(head);
+
+            // أكل التفاحة
+            if (head.x === food.x && head.y === food.y) {
+                score += 10;
+                scoreElement.innerText = score;
+                spawnFood();
+            } else {
+                snake.pop();
+            }
+
+            // رسم الخلفية
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // رسم التفاحة
+            ctx.fillStyle = "#ff003c";
+            ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
+
+            // رسم الثعبان
+            ctx.fillStyle = "#00f2ff";
+            snake.forEach(seg => {
+                ctx.fillRect(seg.x * gridSize, seg.y * gridSize, gridSize - 2, gridSize - 2);
+            });
+        }
+
+        // التحكم باللمس (Swipe)
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        });
+
+        document.addEventListener('touchend', e => {
+            let touchEndX = e.changedTouches[0].screenX;
+            let touchEndY = e.changedTouches[0].screenY;
+            
+            let xDiff = touchEndX - touchStartX;
+            let yDiff = touchEndY - touchStartY;
+
+            if (Math.abs(xDiff) > Math.abs(yDiff)) {
+                if (xDiff > 0 && dx === 0) { dx = 1; dy = 0; } // Right
+                else if (xDiff < 0 && dx === 0) { dx = -1; dy = 0; } // Left
+            } else {
+                if (yDiff > 0 && dy === 0) { dx = 0; dy = 1; } // Down
+                else if (yDiff < 0 && dy === 0) { dx = 0; dy = -1; } // Up
+            }
+        });
     </script>
 </body>
 </html>
