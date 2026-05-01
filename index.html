@@ -3,187 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ADAM SUPREME PRO</title>
+    <title>ADAM ARCADE FINAL</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         html, body { overscroll-behavior: none; background: #020617; height: 100%; overflow: hidden; touch-action: none; }
-        .glass { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); }
-        
-        #bb-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; background: #1e293b; padding: 8px; border-radius: 12px; width: 320px; height: 320px; position: relative; }
-        .bb-cell { background: #0f172a; border-radius: 4px; z-index: 1; }
-        .bb-filled { background: linear-gradient(135deg, #3b82f6, #1d4ed8); border: 1px solid #60a5fa; box-shadow: inset 0 0 5px rgba(255,255,255,0.3); }
-        
-        .piece-container { width: 60px; height: 60px; position: relative; touch-action: none; cursor: grab; z-index: 50; }
-        .p-block { position: absolute; width: 18px; height: 18px; background: #3b82f6; border: 1px solid #60a5fa; border-radius: 3px; pointer-events: none; }
-        
+        .grid-bg { background: #1e293b; padding: 6px; border-radius: 12px; display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; width: 320px; height: 320px; }
+        .cell { background: #0f172a; border-radius: 4px; transition: 0.2s; }
+        .cell.filled { background: #3b82f6; border: 1px solid #60a5fa; box-shadow: inset 0 0 8px rgba(0,0,0,0.5); }
+        .piece-opt { width: 70px; height: 70px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 5px; border-radius: 8px; border: 2px solid transparent; }
+        .piece-opt.selected { border-color: #3b82f6; background: rgba(59, 130, 246, 0.2); }
+        .p-cell { aspect-ratio: 1; border-radius: 2px; }
         canvas { border: 4px solid #1e293b; border-radius: 15px; background: #000; width: 300px; height: 300px; }
-        .ctrl-btn { background: #1e293b; width: 60px; height: 60px; border-radius: 20px; display: flex; align-items: center; justify-content: center; }
-        .ctrl-btn:active { background: #3b82f6; transform: scale(0.9); }
+        .btn-ctrl { background: #1e293b; width: 65px; height: 65px; border-radius: 20px; display: flex; align-items: center; justify-content: center; }
+        .btn-ctrl:active { background: #3b82f6; }
     </style>
 </head>
-<body class="text-white font-sans">
+<body class="text-white">
 
-    <header class="fixed top-0 w-full z-[100] glass px-6 py-4 flex justify-between items-center">
-        <h1 class="font-black text-blue-500 italic">ADAM SYSTEM</h1>
-        <span class="text-[10px] opacity-50 uppercase">Final Version 2026</span>
+    <header class="fixed top-0 w-full z-50 bg-slate-900/80 backdrop-blur-md px-6 py-4 flex justify-between items-center">
+        <h1 class="font-black text-blue-500 italic uppercase">Adam System v4</h1>
     </header>
 
     <main class="h-full flex flex-col justify-center gap-6 px-10">
-        <button onclick="openS()" class="w-full py-6 bg-emerald-600 rounded-2xl font-bold shadow-lg">SNAKE GAME</button>
-        <button onclick="openB()" class="w-full py-6 bg-blue-600 rounded-2xl font-bold shadow-lg">BLOCK BLAST</button>
+        <button onclick="show('s-modal')" class="w-full py-6 bg-emerald-600 rounded-2xl font-bold italic">SNAKE GAME</button>
+        <button onclick="show('b-modal')" class="w-full py-6 bg-blue-600 rounded-2xl font-bold italic">BLOCK BLAST PRO</button>
     </main>
 
     <div id="s-modal" class="fixed inset-0 z-[100] bg-slate-950 hidden flex flex-col items-center pt-20">
         <div class="w-72 flex justify-between mb-4 font-black text-emerald-500">
             <span>SCORE: <span id="s-score">0</span></span>
-            <button onclick="closeAll()"><i data-lucide="x-circle"></i></button>
+            <button onclick="hideAll()"><i data-lucide="x"></i></button>
         </div>
         <canvas id="s-canvas" width="400" height="400"></canvas>
         <div class="grid grid-cols-3 gap-4 mt-8">
             <div></div>
-            <button onclick="chD(0,-1)" class="ctrl-btn"><i data-lucide="chevron-up"></i></button>
+            <button onclick="setDir(0,-1)" class="btn-ctrl"><i data-lucide="chevron-up"></i></button>
             <div></div>
-            <button onclick="chD(-1,0)" class="ctrl-btn"><i data-lucide="chevron-left"></i></button> <button onclick="resetS()" class="w-16 h-16 bg-red-600/20 text-red-500 rounded-full font-bold border border-red-500/30 text-[10px]">RESET</button>
-            <button onclick="chD(1,0)" class="ctrl-btn"><i data-lucide="chevron-right"></i></button> <div></div>
-            <button onclick="chD(0,1)" class="ctrl-btn"><i data-lucide="chevron-down"></i></button>
+            <button onclick="setDir(-1,0)" class="btn-ctrl"><i data-lucide="chevron-left"></i></button>
+            <button onclick="initSnake()" class="bg-red-600/20 text-red-500 w-16 h-16 rounded-full border border-red-600/50 text-[10px] font-bold">RESET</button>
+            <button onclick="setDir(1,0)" class="btn-ctrl"><i data-lucide="chevron-right"></i></button>
+            <div></div>
+            <button onclick="setDir(0,1)" class="btn-ctrl"><i data-lucide="chevron-down"></i></button>
             <div></div>
         </div>
     </div>
 
     <div id="b-modal" class="fixed inset-0 z-[100] bg-slate-950 hidden flex flex-col items-center pt-16">
-        <div class="w-80 flex justify-between mb-2 font-black text-blue-500">
+        <div class="w-80 flex justify-between mb-4 font-black text-blue-500">
             <span>SCORE: <span id="b-score">0</span></span>
-            <button onclick="closeAll()"><i data-lucide="x-circle"></i></button>
+            <button onclick="hideAll()"><i data-lucide="x"></i></button>
         </div>
-        <div id="bb-grid"></div>
-        <div id="options-area" class="mt-12 flex gap-10 h-24 items-center justify-center"></div>
-        <button onclick="refreshPieces()" class="mt-8 bg-blue-500/10 text-blue-400 px-6 py-2 rounded-full border border-blue-500/20 font-bold text-xs">تحديث القطع</button>
+        <div id="grid" class="grid-bg"></div>
+        <div id="pieces" class="mt-8 flex gap-4 h-24 items-center"></div>
+        <button onclick="genPieces()" class="mt-8 text-xs font-bold text-blue-400 border border-blue-500/30 px-6 py-2 rounded-full">تحديث القطع</button>
     </div>
 
     <script>
         lucide.createIcons();
-        function closeAll() { document.querySelectorAll('[id$="-modal"]').forEach(m=>m.classList.add('hidden')); clearInterval(sInt); }
+        function show(id){ document.getElementById(id).classList.remove('hidden'); if(id==='s-modal') initSnake(); if(id==='b-modal') initBlocks(); }
+        function hideAll(){ document.querySelectorAll('[id$="-modal"]').forEach(m=>m.classList.add('hidden')); clearInterval(sLoop); }
 
-        // --- SNAKE LOGIC (FIXED DIRECTIONS) ---
-        let snk, food, sd, ss, sInt;
-        const sc=document.getElementById('s-canvas'), sx=sc.getContext('2d');
-        function openS() { document.getElementById('s-modal').classList.remove('hidden'); resetS(); }
-        function resetS() { clearInterval(sInt); snk=[{x:10,y:10}]; food={x:5,y:5}; sd={x:1,y:0}; ss=0; sInt=setInterval(updS,130); document.getElementById('s-score').innerText=ss; }
-        
-        function chD(nx, ny) {
-            // منع الرجوع للخلف
-            if (nx === -sd.x && ny === -sd.y) return;
-            sd = {x: nx, y: ny};
+        // --- SNAKE (FIXED) ---
+        let snk, food, dir, scr, sLoop;
+        const sCan = document.getElementById('s-canvas'), sx = sCan.getContext('2d');
+
+        function initSnake(){
+            clearInterval(sLoop); snk=[{x:10,y:10}]; food={x:15,y:5}; dir={x:1,y:0}; scr=0;
+            document.getElementById('s-score').innerText=scr;
+            sLoop = setInterval(drawS, 130);
         }
-
-        function updS() {
-            let h={x:snk[0].x+sd.x, y:snk[0].y+sd.y};
-            if(h.x<0)h.x=19; if(h.x>19)h.x=0; if(h.y<0)h.y=19; if(h.y>19)h.y=0;
-            if(snk.some(s=>s.x===h.x && s.y===h.y)) return resetS();
-            snk.unshift(h);
-            if(h.x===food.x && h.y===food.y){ ss+=10; food={x:Math.floor(Math.random()*20),y:Math.floor(Math.random()*20)}; document.getElementById('s-score').innerText=ss; }
+        function setDir(x,y){ if(x !== -dir.x || y !== -dir.y) dir={x,y}; }
+        function drawS(){
+            let head = {x: snk[0].x+dir.x, y: snk[0].y+dir.y};
+            if(head.x<0)head.x=19; if(head.x>19)head.x=0; if(head.y<0)head.y=19; if(head.y>19)head.y=0;
+            if(snk.some(s=>s.x===head.x && s.y===head.y)) return initSnake();
+            snk.unshift(head);
+            if(head.x===food.x && head.y===food.y){ scr+=10; document.getElementById('s-score').innerText=scr; food={x:Math.floor(Math.random()*20),y:Math.floor(Math.random()*20)}; }
             else snk.pop();
-            sx.fillStyle="#000"; sx.fillRect(0,0,400,400);
+            sx.fillStyle="black"; sx.fillRect(0,0,400,400);
             sx.fillStyle="#10b981"; snk.forEach(s=>sx.fillRect(s.x*20,s.y*20,18,18));
             sx.fillStyle="#ef4444"; sx.fillRect(food.x*20,food.y*20,18,18);
         }
 
-        // --- BLOCK BLAST (IMPROVED DRAG & DROP) ---
-        let board=Array(64).fill(0), bScr=0;
+        // --- BLOCK BLAST (CLICK TO PLACE - PERFECT FOR MOBILE) ---
+        let board=Array(64).fill(0), bScr=0, selP=null;
         const SHAPES = [
-            [[1,1],[1,1]], [[1,1,1]], [[1],[1],[1]], [[1,0],[1,1]], [[1,1,1],[0,1,0]], [[1]], [[1,1]], [[1,0,0],[1,1,1]]
+            [[1,1],[1,1]], [[1,1,1]], [[1,1],[0,1]], [[1]], [[1,1]], [[1,0],[1,1]], [[1,1,1],[0,1,0]]
         ];
 
-        function openB() { document.getElementById('b-modal').classList.remove('hidden'); board.fill(0); bScr=0; renderB(); refreshPieces(); }
-        function renderB() {
-            const g=document.getElementById('bb-grid'); g.innerHTML='';
+        function initBlocks(){ board.fill(0); bScr=0; document.getElementById('b-score').innerText=bScr; renderG(); genPieces(); }
+        function renderG(){
+            const g=document.getElementById('grid'); g.innerHTML='';
             board.forEach((v,i)=>{
-                const c=document.createElement('div'); c.className=`bb-cell ${v?'bb-filled':''}`;
+                const c=document.createElement('div');
+                c.className=`cell ${v?'filled':''}`;
+                c.onclick=()=>placeP(i);
                 g.appendChild(c);
             });
         }
-
-        function refreshPieces() {
-            const area = document.getElementById('options-area'); area.innerHTML='';
-            for(let i=0; i<3; i++) createDraggable(SHAPES[Math.floor(Math.random()*SHAPES.length)]);
-        }
-
-        function createDraggable(shape) {
-            const container = document.createElement('div');
-            container.className = 'piece-container';
-            shape.forEach((row, ri) => row.forEach((v, ci) => {
-                if(v) {
-                    const b = document.createElement('div');
-                    b.className = 'p-block';
-                    b.style.top = (ri*20)+'px'; b.style.left = (ci*20)+'px';
-                    container.appendChild(b);
+        function genPieces(){
+            selP=null; const pArea=document.getElementById('pieces'); pArea.innerHTML='';
+            for(let i=0; i<3; i++){
+                let p = SHAPES[Math.floor(Math.random()*SHAPES.length)];
+                let div = document.createElement('div'); div.className="piece-opt";
+                div.onclick=()=>{ document.querySelectorAll('.piece-opt').forEach(el=>el.classList.remove('selected')); div.classList.add('selected'); selP=p; };
+                for(let r=0;r<3;r++){
+                    for(let c=0;c<3;c++){
+                        let cl=document.createElement('div'); cl.className="p-cell "+(p[r]&&p[r][c]?"bg-blue-500":"bg-transparent");
+                        div.appendChild(cl);
+                    }
                 }
-            }));
-
-            container.addEventListener('touchstart', (e) => {
-                let touch = e.touches[0];
-                let rect = container.getBoundingClientRect();
-                // Offset باش صبعك ما يغطيش على القطعة (طلعناها بـ 40px لفوق)
-                let shiftY = 40; 
-                
-                const onMove = (me) => {
-                    let mt = me.touches[0];
-                    container.style.position = 'fixed';
-                    container.style.left = (mt.clientX - 30) + 'px';
-                    container.style.top = (mt.clientY - 30 - shiftY) + 'px';
-                };
-
-                const onEnd = (ee) => {
-                    document.removeEventListener('touchmove', onMove);
-                    document.removeEventListener('touchend', onEnd);
-                    
-                    let gridRect = document.getElementById('bb-grid').getBoundingClientRect();
-                    let dropX = ee.changedTouches[0].clientX;
-                    let dropY = ee.changedTouches[0].clientY - shiftY;
-
-                    if(dropX > gridRect.left && dropX < gridRect.right && dropY > gridRect.top && dropY < gridRect.bottom) {
-                        let col = Math.floor((dropX - gridRect.left) / (gridRect.width / 8));
-                        let row = Math.floor((dropY - gridRect.top) / (gridRect.height / 8));
-                        
-                        if(canPlace(row, col, shape)) {
-                            place(row, col, shape);
-                            container.remove();
-                            if(document.getElementById('options-area').children.length === 0) refreshPieces();
-                        } else { resetPos(container); }
-                    } else { resetPos(container); }
-                };
-
-                document.addEventListener('touchmove', onMove);
-                document.addEventListener('touchend', onEnd);
-            });
-            document.getElementById('options-area').appendChild(container);
+                pArea.appendChild(div);
+            }
         }
-
-        function resetPos(el) { el.style.position='relative'; el.style.left='0'; el.style.top='0'; }
-        
-        function canPlace(r, c, sh) {
-            return sh.every((row, ri) => row.every((v, ci) => {
-                if(!v) return true;
-                let tr=r+ri, tc=c+ci;
-                return tr < 8 && tc < 8 && !board[tr*8+tc];
+        function placeP(i){
+            if(!selP) return alert('اختار قطعة أولاً!');
+            let r=Math.floor(i/8), c=i%8, can=true;
+            selP.forEach((row,ri)=>row.forEach((v,ci)=>{
+                if(v){ let tr=r+ri, tc=c+ci; if(tr>7||tc>7||board[tr*8+tc]) can=false; }
             }));
+            if(can){
+                selP.forEach((row,ri)=>row.forEach((v,ci)=>{ if(v) board[(r+ri)*8+(c+ci)]=1; }));
+                bScr+=20; checkLines(); renderG(); selP=null; 
+                document.querySelector('.selected').style.opacity="0"; 
+                document.querySelector('.selected').classList.remove('selected');
+                document.getElementById('b-score').innerText=bScr;
+                if(Array.from(document.getElementById('pieces').children).every(child => child.style.opacity === "0")) genPieces();
+            }
         }
-
-        function place(r, c, sh) {
-            sh.forEach((row, ri) => row.forEach((v, ci) => {
-                if(v) board[(r+ri)*8+(ci+c)] = 1;
-            }));
-            bScr += 20; checkL(); renderB();
-            document.getElementById('b-score').innerText = bScr;
-        }
-
-        function checkL() {
-            for(let i=0; i<8; i++) {
-                let row = board.slice(i*8, (i+1)*8);
-                if(row.every(v=>v===1)) { for(let j=0; j<8; j++) board[i*8+j]=0; bScr+=100; }
-                let col = []; for(let j=0; j<8; j++) col.push(board[j*8+i]);
-                if(col.every(v=>v===1)) { for(let j=0; j<8; j++) board[j*8+i]=0; bScr+=100; }
+        function checkLines(){
+            for(let i=0;i<8;i++){
+                let r=board.slice(i*8,(i+1)*8); if(r.every(v=>v===1)){ for(let j=0;j<8;j++)board[i*8+j]=0; bScr+=100; }
+                let col=[]; for(let j=0;j<8;j++)col.push(board[j*8+i]); if(col.every(v=>v===1)){ for(let j=0;j<8;j++)board[j*8+i]=0; bScr+=100; }
             }
         }
     </script>
