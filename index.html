@@ -1,140 +1,214 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PFE M2 Technologie Éducative – iMatrice</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADAM ABABOU | 1BACSE-6</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f2f2f2;
-            text-align: center;
-        }
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(black, #0a0a0a);
+      color: #00ff41;
+      font-family: 'Cairo', sans-serif;
+      background-image: 
+        linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
 
-        header {
-            background: #1a1a1a;
-            color: white;
-            padding: 20px;
-            font-size: 22px;
-            font-weight: bold;
-        }
+    header {
+      background: rgba(0, 0, 0, 0.95);
+      border-bottom: 3px solid #00ff41;
+      padding: 20px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 0 20px #00ff41;
+    }
 
-        .container {
-            margin: 30px auto;
-            max-width: 900px;
-        }
+    .hacker-skull {
+      font-size: 4rem;
+      filter: drop-shadow(0 0 15px #00ff41);
+      animation: glitch 1.5s infinite;
+    }
 
-        .card {
-            background: white;
-            padding: 25px;
-            margin: 20px 0;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+    @keyframes glitch {
+      0% { text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff; }
+      20% { text-shadow: -2px 0 #ff00ff, 2px 0 #00ffff; }
+    }
 
-        .modules {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
+    h1 {
+      margin: 10px 0;
+      font-size: 3.5rem;
+      text-shadow: 0 0 20px #00ff41;
+      letter-spacing: 5px;
+    }
 
-        .module {
-            background: #ffffff;
-            border: 2px solid #0077ff;
-            padding: 20px;
-            width: 200px;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      border-bottom: 2px solid #00ff41;
+    }
 
-        .module:hover {
-            background: #0077ff;
-            color: white;
-        }
+    .tab-btn {
+      padding: 15px 25px;
+      background: #111;
+      color: #00ff41;
+      border: 2px solid #00ff41;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      min-width: 180px;
+    }
 
-        .score-box {
-            font-size: 20px;
-            margin-top: 10px;
-            font-weight: bold;
-        }
+    .tab-btn:hover, .tab-btn.active {
+      background: #00ff41;
+      color: black;
+      box-shadow: 0 0 25px #00ff41;
+      transform: scale(1.05);
+    }
 
-        button {
-            background: #ff6600;
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            font-size: 18px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+    .tab-content {
+      display: none;
+      padding: 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+      min-height: 70vh;
+    }
 
-        button:hover {
-            background: #cc5200;
-        }
+    .tab-content.active {
+      display: block;
+    }
 
-        footer {
-            margin-top: 40px;
-            padding: 20px;
-            color: #555;
-        }
-    </style>
+    .card {
+      background: rgba(20, 20, 20, 0.95);
+      border: 1px solid #00ff41;
+      padding: 30px;
+      margin: 20px 0;
+      box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+      border-radius: 8px;
+    }
+
+    .messi-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 18px 35px;
+      background: #00ff41;
+      color: black;
+      font-size: 1.3rem;
+      font-weight: bold;
+      text-decoration: none;
+      border: 3px solid #00ff41;
+      box-shadow: 0 0 20px #00ff41;
+      transition: all 0.4s;
+    }
+
+    .messi-btn:hover {
+      background: black;
+      color: #00ff41;
+      transform: scale(1.08);
+      box-shadow: 0 0 40px #00ff41;
+    }
+  </style>
 </head>
-
 <body>
 
-<header>
-    PFE M2 Technologie Éducative – iMatrice
-</header>
+  <header>
+    <div class="hacker-skull">☠️</div>
+    <h1>ADAM ABABOU</h1>
+    <p class="subtitle">ملك 1BACSE-6 • الهاكرز • GOAT ديال القسم</p>
+  </header>
 
-<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="openTab(event, 'home')">الرئيسية</button>
+    <button class="tab-btn" onclick="openTab(event, 'about')">عن أدم</button>
+    <button class="tab-btn" onclick="openTab(event, 'class')">1BACSE-6</button>
+    <button class="tab-btn" onclick="openTab(event, 'hacks')">هاكز وتراب</button>
+    <button class="tab-btn" onclick="openTab(event, 'gallery')">غاليري</button>
+    <button class="tab-btn" onclick="openTab(event, 'contact')">تواصل</button>
+  </div>
 
+  <!-- الرئيسية -->
+  <div id="home" class="tab-content active">
     <div class="card">
-        <h2>iMatrice Platinum / iMatrice Pro</h2>
-        <p>Choisissez un module pour commencer :</p>
-
-        <div class="modules">
-            <div class="module">Suites</div>
-            <div class="module">Limites</div>
-            <div class="module">Dérivation</div>
-        </div>
-
-        <div class="score-box">
-            Élève Score : <span id="score">0</span> — XP : <span id="xp">0</span>
-        </div>
+      <h2>مرحبا في مملكة أدم عبابو</h2>
+      <p>سموك وايپ وايپ... گلیزر بومه... توين توين 🔥</p>
     </div>
+  </div>
 
+  <!-- عن أدم (الصفحة الجديدة مع رابط ميسي) -->
+  <div id="about" class="tab-content">
     <div class="card">
-        <h3>Envoyer CARNET MÉTHODOLOGIQUE</h3>
-        <button onclick="alert('Fonction non encore activée')">Envoyer</button>
+      <h2>من هو أدم عبابو؟</h2>
+      <p>هاكر، ترابر، ملك 1BACSE-6، وصاحب الستايل اللي ما ينضربش.</p>
+      <p>كي دخل القسم... الكل عرف بلي جاء الـGOAT.</p>
+      
+      <h2>أدم عبابو = ليونيل ميسي ديال سلا والرباط</h2>
+      <p>الأسطورة اللي كتغير اللعبة بوحدها.</p>
+      
+      <a href="https://ar.wikipedia.org/wiki/%D9%84%D9%8A%D9%88%D9%86%D9%8A%D9%84_%D9%85%D9%8A%D8%B3%D9%8A" 
+         target="_blank" class="messi-btn">
+        ادخل لصفحة ويكيبيديا ديال ليونيل ميسي
+      </a>
+      
+      <p style="margin-top:30px; opacity:0.8;">
+        (باش تشوف الأسطورة الحقيقية اللي أدم كيتشبه بيها)
+      </p>
     </div>
+  </div>
 
-</div>
+  <!-- باقي الأقسام (مختصرة) -->
+  <div id="class" class="tab-content">
+    <div class="card">
+      <h2>قسم 1BACSE-6</h2>
+      <p>أقوى قسم فالمغرب. أدم عبابو هو الملك ديالو.</p>
+    </div>
+  </div>
 
-<footer>
-    © 2026 — iMatrice (version reconstruite)
-</footer>
+  <div id="hacks" class="tab-content">
+    <div class="card">
+      <h2>هاكز وتراب</h2>
+      <p>سموك وايپ وايپ<br>گلیزر بومه بوم<br>توين توين أدم جاي يدمر</p>
+    </div>
+  </div>
 
-<script>
-    // Exemple simple d'interactivité
-    let score = 0;
-    let xp = 0;
+  <div id="gallery" class="tab-content">
+    <div class="card">
+      <h2>غاليري الملك</h2>
+      <p>هنا غادي تضع الصور والميمز...</p>
+    </div>
+  </div>
 
-    document.querySelectorAll('.module').forEach(m => {
-        m.addEventListener('click', () => {
-            score += 5;
-            xp += 10;
-            document.getElementById('score').textContent = score;
-            document.getElementById('xp').textContent = xp;
-        });
-    });
-</script>
+  <div id="contact" class="tab-content">
+    <div class="card">
+      <h2>تواصل مع الملك</h2>
+      <p>أنت كتعرف فين تلقاني 😉</p>
+    </div>
+  </div>
+
+  <script>
+    function openTab(evt, tabName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tab-content");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tab-btn");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+  </script>
 
 </body>
 </html>
