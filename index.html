@@ -3,248 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>آدم - مركز الألعاب الاحترافي</title>
+    <title>ADAM ARCADE V3</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* منع ريفرش الصفحة عند السحب لأسفل */
+        /* منع أي حركة للمتصفح غير مرغوب فيها */
         html, body { 
-            overscroll-behavior-y: contain; 
-            background-color: #0b0f1a; 
-            color: white; 
-            margin: 0; 
+            overscroll-behavior: none; 
+            background: #020617; 
             height: 100%; 
-            overflow: hidden;
+            overflow: hidden; 
+            touch-action: none;
         }
-        .glass-effect { background: rgba(17, 24, 39, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-        .hidden { display: none; }
-        canvas { border: 3px solid #3b82f6; background: #000; border-radius: 10px; width: 100%; max-width: 350px; }
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
         
-        /* Block Blast Grid */
-        #bb-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; background: #1e293b; padding: 4px; border-radius: 8px; }
-        .bb-cell { width: 40px; height: 40px; background: #0f172a; border-radius: 4px; transition: 0.2s; }
-        .bb-filled { background: #3b82f6; box-shadow: inset 0 0 8px rgba(0,0,0,0.5); border: 1px solid #60a5fa; }
+        /* Grid Block Blast */
+        #bb-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 3px; background: #1e293b; padding: 6px; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .bb-cell { aspect-ratio: 1; background: #0f172a; border-radius: 4px; transition: all 0.1s; }
+        .bb-filled { background: linear-gradient(135deg, #3b82f6, #1d4ed8); border: 1px solid #60a5fa; box-shadow: inset 0 0 8px rgba(255,255,255,0.3); }
         
-        /* Pieces */
-        .piece-option { display: grid; gap: 2px; padding: 5px; background: rgba(255,255,255,0.05); border-radius: 5px; cursor: pointer; }
-        .piece-cell { width: 15px; height: 15px; border-radius: 2px; }
+        /* Piece Styles */
+        .piece-box { width: 80px; height: 80px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 5px; border-radius: 10px; border: 2px solid transparent; }
+        .selected { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); transform: scale(1.1); }
+        .p-cell { aspect-ratio: 1; border-radius: 2px; }
+        
+        /* Snake Canvas */
+        canvas { border: 4px solid #1e293b; border-radius: 15px; background: #000; width: 100%; max-width: 320px; }
     </style>
 </head>
-<body class="font-sans">
+<body class="text-white font-sans">
 
-    <nav class="fixed top-0 w-full z-50 glass-effect px-4 py-3 flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <i data-lucide="shield-check" class="text-blue-500 w-6 h-6"></i>
-            <span class="font-bold tracking-widest text-lg">ADAM<span class="text-blue-500">SYSTEM</span></span>
+    <header class="fixed top-0 w-full z-50 glass px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold">A</div>
+            <h1 class="text-lg font-black tracking-tighter">ADAM<span class="text-blue-500 text-[10px] ml-1">SYSTEM V3</span></h1>
         </div>
-        <div class="text-[10px] bg-blue-600 px-2 py-0.5 rounded-full font-bold">1BACSE-6</div>
-    </nav>
+        <div class="px-3 py-1 bg-red-600/20 text-red-500 rounded-full text-[10px] font-bold border border-red-500/30">1BACSE-6</div>
+    </header>
 
-    <main class="h-full pt-20 pb-10 px-6 overflow-y-auto">
-        <div class="grid grid-cols-1 gap-6 max-w-md mx-auto">
-            
-            <div class="bg-gray-900 border-2 border-green-900/30 rounded-3xl p-6 relative overflow-hidden group">
-                <div class="absolute -right-4 -top-4 opacity-10 group-hover:scale-110 transition">
-                    <i data-lucide="snake" class="w-32 h-32"></i>
-                </div>
-                <h2 class="text-2xl font-black mb-1">Snake Classic</h2>
-                <p class="text-gray-400 text-xs mb-6 italic font-serif">"قانون الغابة: تحرك أو تؤكل"</p>
-                <button onclick="openSnake()" class="w-full bg-green-600 hover:bg-green-500 py-3 rounded-2xl font-black text-lg transition shadow-lg shadow-green-900/40">تـشـغـيـل</button>
-            </div>
+    <main class="h-full flex flex-col justify-center gap-6 px-8 pt-10">
+        <button onclick="openSnake()" class="w-full py-8 bg-gradient-to-r from-emerald-600 to-teal-800 rounded-3xl shadow-xl active:scale-95 transition-transform flex flex-col items-center">
+            <i data-lucide="snake" class="w-10 h-10 mb-2"></i>
+            <span class="text-xl font-black">SNAKE CLASSIC</span>
+            <span class="text-[10px] opacity-60 italic">"ممنوع تحنى للجمال"</span>
+        </button>
 
-            <div class="bg-gray-900 border-2 border-blue-900/30 rounded-3xl p-6 relative overflow-hidden group">
-                <div class="absolute -right-4 -top-4 opacity-10 group-hover:scale-110 transition">
-                    <i data-lucide="layout-grid" class="w-32 h-32"></i>
-                </div>
-                <h2 class="text-2xl font-black mb-1">Block Blast IQ</h2>
-                <p class="text-gray-400 text-xs mb-6 italic">"رتب المربعات، فجر السطور"</p>
-                <button onclick="openBlocks()" class="w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-2xl font-black text-lg transition shadow-lg shadow-blue-900/40">تـشـغـيـل</button>
-            </div>
-
-        </div>
+        <button onclick="openBlocks()" class="w-full py-8 bg-gradient-to-r from-blue-600 to-indigo-800 rounded-3xl shadow-xl active:scale-95 transition-transform flex flex-col items-center">
+            <i data-lucide="layout-grid" class="w-10 h-10 mb-2"></i>
+            <span class="text-xl font-black">BLOCK BLAST PRO</span>
+            <span class="text-[10px] opacity-60 italic">"دمر الكاريير ديال المربعات"</span>
+        </button>
     </main>
 
-    <div id="snake-modal" class="fixed inset-0 z-[100] bg-[#050505] hidden flex-col items-center justify-start pt-20">
-        <div class="flex justify-between w-full max-w-[350px] px-2 mb-4">
-            <div class="text-green-500 font-black">SCORE: <span id="s-score">0</span></div>
-            <button onclick="closeAll()" class="text-white/50"><i data-lucide="circle-x"></i></button>
+    <div id="snake-modal" class="fixed inset-0 z-[100] bg-slate-950 hidden flex flex-col items-center pt-24 px-4">
+        <div class="w-full max-w-[320px] flex justify-between mb-4 font-black">
+            <span class="text-emerald-500">SCORE: <span id="s-score">0</span></span>
+            <button onclick="closeModals()" class="text-white/30"><i data-lucide="x-circle"></i></button>
         </div>
-        
         <canvas id="s-canvas" width="400" height="400"></canvas>
-
-        <div class="grid grid-cols-3 gap-3 mt-8">
-            <div></div>
-            <button onclick="changeDir(0,-1)" class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center active:bg-green-600"><i data-lucide="chevron-up"></i></button>
-            <div></div>
-            <button onclick="changeDir(-1,0)" class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center active:bg-green-600"><i data-lucide="chevron-left"></i></button>
-            <button onclick="resetSnake()" class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center active:scale-90 font-bold text-[10px]">RESTART</button>
-            <button onclick="changeDir(1,0)" class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center active:bg-green-600"><i data-lucide="chevron-right"></i></button>
-            <div></div>
-            <button onclick="changeDir(0,1)" class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center active:bg-green-600"><i data-lucide="chevron-down"></i></button>
-            <div></div>
+        
+        <div class="grid grid-cols-3 gap-4 mt-8">
+            <div class="h-16"></div>
+            <button onclick="chDir(0,-1)" class="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center active:bg-emerald-600"><i data-lucide="chevron-up"></i></button>
+            <div class="h-16"></div>
+            <button onclick="chDir(-1,0)" class="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center active:bg-emerald-600"><i data-lucide="chevron-left"></i></button>
+            <button onclick="resetS()" class="w-16 h-16 bg-red-600 rounded-2xl font-bold text-[10px] flex items-center justify-center shadow-lg shadow-red-900/50">RESET</button>
+            <button onclick="chDir(1,0)" class="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center active:bg-emerald-600"><i data-lucide="chevron-right"></i></button>
+            <div class="h-16"></div>
+            <button onclick="chDir(0,1)" class="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center active:bg-emerald-600"><i data-lucide="chevron-down"></i></button>
+            <div class="h-16"></div>
         </div>
     </div>
 
-    <div id="bb-modal" class="fixed inset-0 z-[100] bg-[#050505] hidden flex-col items-center justify-start pt-16">
-        <div class="flex justify-between w-full max-w-[330px] px-2 mb-4">
-            <div class="text-blue-500 font-black">SCORE: <span id="b-score">0</span></div>
-            <button onclick="closeAll()" class="text-white/50"><i data-lucide="circle-x"></i></button>
+    <div id="bb-modal" class="fixed inset-0 z-[100] bg-slate-950 hidden flex flex-col items-center pt-20 px-4">
+        <div class="w-full max-w-[320px] flex justify-between mb-4 font-black">
+            <span class="text-blue-500">SCORE: <span id="b-score">0</span></span>
+            <button onclick="closeModals()" class="text-white/30"><i data-lucide="x-circle"></i></button>
         </div>
-
-        <div id="bb-grid"></div>
-
-        <div class="mt-8">
-            <p class="text-center text-[10px] text-gray-500 mb-2 font-bold">اختار قطعة وضعها في الشبكة</p>
-            <div id="bb-options" class="flex gap-4 justify-center"></div>
-        </div>
+        <div id="bb-grid" class="w-full max-w-[320px]"></div>
         
-        <button onclick="openBlocks()" class="mt-10 bg-gray-800 px-6 py-2 rounded-full text-xs font-bold border border-gray-700">تحديث القطع</button>
+        <div class="mt-8 w-full">
+            <p class="text-center text-[10px] text-slate-500 font-bold mb-4">اختار القطعة تم اضغط في الشبكة</p>
+            <div id="bb-options" class="flex justify-around items-center"></div>
+        </div>
+        <button onclick="openBlocks()" class="mt-8 text-[10px] font-bold text-blue-400 bg-blue-500/10 px-4 py-2 rounded-full border border-blue-500/20">تحديث القطع</button>
     </div>
 
     <script>
         lucide.createIcons();
-
-        function closeAll() {
-            document.querySelectorAll('[id$="-modal"]').forEach(m => m.classList.add('hidden'));
-            clearInterval(sInterval);
+        function closeModals() { 
+            document.querySelectorAll('[id$="-modal"]').forEach(m => m.classList.add('hidden')); 
+            clearInterval(sInt);
         }
 
-        // --- SNAKE SYSTEM ---
-        const sc = document.getElementById('s-canvas');
-        const sx = sc.getContext('2d');
-        let snake, food, sDir, sScore, sInterval;
+        // --- SNAKE LOGIC ---
+        let snk, food, sD, sScr, sInt;
+        const sCan = document.getElementById('s-canvas');
+        const sCtx = sCan.getContext('2d');
 
-        function openSnake() {
-            document.getElementById('snake-modal').classList.remove('hidden');
-            resetSnake();
+        function openSnake() { 
+            document.getElementById('snake-modal').classList.remove('hidden'); 
+            resetS(); 
         }
-
-        function resetSnake() {
-            clearInterval(sInterval);
-            snake = [{x:10,y:10}]; food = {x:5,y:5}; sDir = {x:1,y:0}; sScore = 0;
-            document.getElementById('s-score').innerText = sScore;
-            sInterval = setInterval(updateSnake, 120);
+        function resetS() {
+            clearInterval(sInt);
+            snk = [{x:10,y:10}]; food = {x:15,y:5}; sD = {x:1,y:0}; sScr = 0;
+            document.getElementById('s-score').innerText = sScr;
+            sInt = setInterval(updS, 130);
         }
-
-        function changeDir(x, y) {
-            if((x !== -sDir.x) || (y !== -sDir.y)) sDir = {x, y};
-        }
-
-        function updateSnake() {
-            let head = {x: snake[0].x + sDir.x, y: snake[0].y + sDir.y};
-            if(head.x<0)head.x=19; if(head.x>19)head.x=0; if(head.y<0)head.y=19; if(head.y>19)head.y=0;
-            
-            if(snake.some(s => s.x === head.x && s.y === head.y)) return resetSnake();
-            
-            snake.unshift(head);
-            if(head.x === food.x && head.y === food.y) {
-                sScore += 10; document.getElementById('s-score').innerText = sScore;
+        function chDir(x,y) { if(x !== -sD.x || y !== -sD.y) sD = {x,y}; }
+        function updS() {
+            let h = {x: snk[0].x+sD.x, y: snk[0].y+sD.y};
+            if(h.x<0)h.x=19; if(h.x>19)h.x=0; if(h.y<0)h.y=19; if(h.y>19)h.y=0;
+            if(snk.some(s=>s.x===h.x && s.y===h.y)) return resetS();
+            snk.unshift(h);
+            if(h.x===food.x && h.y===food.y) {
+                sScr+=10; document.getElementById('s-score').innerText = sScr;
                 food = {x: Math.floor(Math.random()*20), y: Math.floor(Math.random()*20)};
-            } else { snake.pop(); }
-
-            sx.fillStyle = "black"; sx.fillRect(0,0,400,400);
-            sx.fillStyle = "#22c55e"; snake.forEach(s => sx.fillRect(s.x*20, s.y*20, 18, 18));
-            sx.fillStyle = "#ef4444"; sx.fillRect(food.x*20, food.y*20, 18, 18);
+            } else { snk.pop(); }
+            sCtx.fillStyle="#000"; sCtx.fillRect(0,0,400,400);
+            sCtx.fillStyle="#10b981"; snk.forEach(s=>sCtx.fillRect(s.x*20, s.y*20, 18, 18));
+            sCtx.fillStyle="#ef4444"; sCtx.fillRect(food.x*20, food.y*20, 18, 18);
         }
 
-        // --- BLOCK BLAST SYSTEM ---
-        let bBoard = Array(64).fill(0);
-        let bScore = 0;
-        let selectedPiece = null;
-
+        // --- BLOCK BLAST LOGIC ---
+        let board = Array(64).fill(0), bScr = 0, currP = null;
         const PIECES = [
-            [[1,1],[1,1]], // Square
-            [[1,1,1]],     // Line 3
-            [[1],[1],[1]], // Vertical 3
-            [[1,0],[1,1]], // L Shape
-            [[1]]          // Single
+            [[1,1],[1,1]], [[1,1,1]], [[1],[1],[1]], [[1,0],[1,1]], [[1,1],[0,1]], [[1,1,1],[0,1,0]]
         ];
 
         function openBlocks() {
             document.getElementById('bb-modal').classList.remove('hidden');
-            bBoard = Array(64).fill(0); bScore = 0;
-            document.getElementById('b-score').innerText = bScore;
-            renderBB();
-            genOptions();
+            board = Array(64).fill(0); bScr = 0; currP = null;
+            document.getElementById('b-score').innerText = bScr;
+            renderB(); genP();
         }
-
-        function renderBB() {
+        function renderB() {
             const g = document.getElementById('bb-grid'); g.innerHTML = '';
-            bBoard.forEach((v, i) => {
+            board.forEach((v, i) => {
                 const c = document.createElement('div');
                 c.className = `bb-cell ${v?'bb-filled':''}`;
-                c.onclick = () => tryPlace(i);
+                c.onclick = () => placeP(i);
                 g.appendChild(c);
             });
         }
-
-        function genOptions() {
+        function genP() {
             const opt = document.getElementById('bb-options'); opt.innerHTML = '';
             for(let i=0; i<3; i++) {
-                const p = PIECES[Math.floor(Math.random()*PIECES.length)];
-                const div = document.createElement('div');
-                div.className = "piece-option";
-                div.onclick = () => {
-                    selectedPiece = p;
-                    document.querySelectorAll('.piece-option').forEach(el => el.style.border = "none");
-                    div.style.border = "2px solid #3b82f6";
+                let p = PIECES[Math.floor(Math.random()*PIECES.length)];
+                let d = document.createElement('div'); d.className = "piece-box";
+                d.onclick = (e) => {
+                    document.querySelectorAll('.piece-box').forEach(el=>el.classList.remove('selected'));
+                    d.classList.add('selected'); currP = p;
                 };
-                p.forEach(row => {
-                    const rDiv = document.createElement('div'); rDiv.className = "flex gap-0.5";
-                    row.forEach(cell => {
-                        const cDiv = document.createElement('div');
-                        cDiv.className = `piece-cell ${cell?'bg-blue-500':'bg-transparent'}`;
-                        rDiv.appendChild(cDiv);
-                    });
-                    div.appendChild(rDiv);
-                });
-                opt.appendChild(div);
-            }
-        }
-
-        function tryPlace(idx) {
-            if(!selectedPiece) return;
-            let r = Math.floor(idx/8), c = idx%8;
-            let can = true;
-            
-            selectedPiece.forEach((row, ri) => {
-                row.forEach((v, ci) => {
-                    if(v) {
-                        let targetR = r + ri, targetC = c + ci;
-                        if(targetR > 7 || targetC > 7 || bBoard[targetR*8 + targetC]) can = false;
+                for(let r=0; r<3; r++){
+                    for(let c=0; c<3; c++){
+                        let cell = document.createElement('div');
+                        cell.className = "p-cell " + (p[r] && p[r][c] ? "bg-blue-500" : "bg-transparent");
+                        d.appendChild(cell);
                     }
-                });
-            });
-
-            if(can) {
-                selectedPiece.forEach((row, ri) => {
-                    row.forEach((v, ci) => {
-                        if(v) bBoard[(r+ri)*8 + (c+ci)] = 1;
-                    });
-                });
-                bScore += 10;
-                checkBB();
-                renderBB();
-                selectedPiece = null;
-                document.getElementById('b-score').innerText = bScore;
-                if(document.getElementById('bb-options').querySelectorAll('.piece-option').length === 0) genOptions();
+                }
+                opt.appendChild(d);
             }
         }
-
-        function checkBB() {
+        function placeP(i) {
+            if(!currP) return;
+            let r = Math.floor(i/8), c = i%8, can = true;
+            currP.forEach((row, ri) => row.forEach((v, ci) => {
+                if(v) {
+                    let tr = r+ri, tc = c+ci;
+                    if(tr>7 || tc>7 || board[tr*8+tc]) can = false;
+                }
+            }));
+            if(can) {
+                currP.forEach((row, ri) => row.forEach((v, ci) => { if(v) board[(r+ri)*8+(c+ci)]=1; }));
+                bScr += 20; checkL(); renderB(); currP = null;
+                document.getElementById('b-score').innerText = bScr;
+                document.querySelector('.selected').innerHTML = ''; // إخفاء القطعة المستخدمة
+                document.querySelector('.selected').classList.remove('selected');
+            }
+        }
+        function checkL() {
             for(let i=0; i<8; i++) {
-                // Check Rows
-                let row = bBoard.slice(i*8, (i+1)*8);
-                if(row.every(v => v === 1)) {
-                    for(let j=0; j<8; j++) bBoard[i*8+j] = 0;
-                    bScore += 80;
-                }
-                // Check Columns
-                let col = []; for(let j=0; j<8; j++) col.push(bBoard[j*8+i]);
-                if(col.every(v => v === 1)) {
-                    for(let j=0; j<8; j++) bBoard[j*8+i] = 0;
-                    bScore += 80;
-                }
+                let row = board.slice(i*8, (i+1)*8);
+                if(row.every(v=>v===1)) { for(let j=0; j<8; j++) board[i*8+j]=0; bScr+=100; }
+                let col = []; for(let j=0; j<8; j++) col.push(board[j*8+i]);
+                if(col.every(v=>v===1)) { for(let j=0; j<8; j++) board[j*8+i]=0; bScr+=100; }
             }
         }
     </script>
