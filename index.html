@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Snake Pro 🐍</title>
+<title>Snake Ultra Smooth 🐍</title>
 
 <style>
 body{
@@ -35,26 +35,28 @@ canvas{
     border-radius:10px;
 }
 
-select{
-    padding:5px;
-    margin-top:10px;
+a{
+    color:lime;
+    text-decoration:none;
+}
+
+.hiddenPage{
+    display:none;
+    margin-top:50px;
+    font-size:25px;
 }
 </style>
 </head>
 
 <body>
 
-<h2>🐍 Snake Pro</h2>
+<h2>🐍 Snake Ultra</h2>
 <p>Score: <span id="score">0</span></p>
 
-<select id="difficulty">
-    <option value="150">🟢 سهل</option>
-    <option value="100">🟡 متوسط</option>
-    <option value="70">🔴 صعب</option>
-</select>
-
-<br>
-<button class="btn" onclick="restartGame()">🔄</button>
+<p>
+Edited by 
+<a href="#" onclick="showSecret()">Adam Ababou</a>
+</p>
 
 <canvas id="game" width="300" height="300"></canvas>
 
@@ -69,23 +71,25 @@ select{
     </div>
 </div>
 
+<!-- الصفحة المخفية -->
+<div id="secret" class="hiddenPage">
+    ❤️ marwa mounir i love you ❤️
+</div>
+
 <script>
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
 const box = 15;
-let snake, direction, food, score, game;
+let snake = [{x:150,y:150}];
+let direction = "RIGHT";
+let food = randomFood();
+let score = 0;
 
-// init
-function init(){
-    snake = [{x:150,y:150}];
-    direction = "RIGHT";
-    food = randomFood();
-    score = 0;
-    document.getElementById("score").innerText = score;
-}
+// smooth timing
+let lastTime = 0;
+let speed = 100; // كلما نقص زادت السرعة
 
-// direction
 function setDir(dir){
     if(dir==="LEFT" && direction!=="RIGHT") direction="LEFT";
     if(dir==="UP" && direction!=="DOWN") direction="UP";
@@ -93,20 +97,6 @@ function setDir(dir){
     if(dir==="DOWN" && direction!=="UP") direction="DOWN";
 }
 
-// restart
-function restartGame(){
-    clearInterval(game);
-    init();
-    startGame();
-}
-
-// difficulty
-function startGame(){
-    let speed = document.getElementById("difficulty").value;
-    game = setInterval(draw, speed);
-}
-
-// food
 function randomFood(){
     return {
         x: Math.floor(Math.random()*20)*box,
@@ -114,12 +104,19 @@ function randomFood(){
     };
 }
 
-// draw
-function draw(){
+function gameLoop(time){
+    if(time - lastTime > speed){
+        update();
+        lastTime = time;
+    }
+    requestAnimationFrame(gameLoop);
+}
+
+function update(){
     ctx.fillStyle="#111";
     ctx.fillRect(0,0,300,300);
 
-    // snake (مربعات)
+    // snake
     for(let i=0;i<snake.length;i++){
         ctx.fillStyle = i==0 ? "lime" : "green";
         ctx.fillRect(snake[i].x,snake[i].y,box,box);
@@ -137,7 +134,7 @@ function draw(){
     if(direction==="RIGHT") headX += box;
     if(direction==="DOWN") headY += box;
 
-    // FIX الحافة (Teleport)
+    // teleport edges
     if(headX < 0) headX = 300 - box;
     if(headY < 0) headY = 300 - box;
     if(headX >= 300) headX = 0;
@@ -154,22 +151,20 @@ function draw(){
 
     let newHead = {x:headX,y:headY};
 
-    // collision with itself
-    if(collide(newHead)){
-        clearInterval(game);
-        alert("Game Over 😢 Score: "+score);
+    // collide
+    for(let i=0;i<snake.length;i++){
+        if(newHead.x===snake[i].x && newHead.y===snake[i].y){
+            alert("Game Over 😢 Score: "+score);
+            location.reload();
+        }
     }
 
     snake.unshift(newHead);
 }
 
-function collide(head){
-    for(let i=0;i<snake.length;i++){
-        if(head.x===snake[i].x && head.y===snake[i].y){
-            return true;
-        }
-    }
-    return false;
+// secret page
+function showSecret(){
+    document.getElementById("secret").style.display = "block";
 }
 
 // swipe
@@ -192,9 +187,7 @@ canvas.addEventListener("touchmove", e=>{
     }
 });
 
-// start
-init();
-startGame();
+requestAnimationFrame(gameLoop);
 </script>
 
 </body>
