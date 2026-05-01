@@ -1,200 +1,126 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ababou OS - Mobile Hack</title>
-    <style>
-        :root {
-            --hacker-red: #ff003c;
-            --hacker-green: #00f2ff;
-            --bg-black: #050505;
-        }
+<meta charset="UTF-8">
+<title>Snake Game 🐍</title>
 
-        body {
-            background-color: var(--bg-black);
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+<style>
+body {
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial;
+    color: white;
+}
 
-        /* حواف فخمة للجسم */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            border: 4px solid var(--hacker-red);
-            pointer-events: none;
-            z-index: 999;
-            box-shadow: inset 0 0 20px rgba(255, 0, 60, 0.5);
-        }
+canvas {
+    background: #111;
+    box-shadow: 0 0 20px lime;
+}
 
-        header {
-            text-align: center;
-            padding: 25px 15px;
-            border-bottom: 2px solid var(--hacker-red);
-            background: linear-gradient(to bottom, #1a0000, var(--bg-black));
-        }
-
-        .hacker-icon {
-            font-size: 45px;
-            color: var(--hacker-red);
-            text-shadow: 0 0 15px var(--hacker-red);
-            margin-bottom: 10px;
-        }
-
-        h1 {
-            font-size: 1.4rem;
-            margin: 5px 0;
-            letter-spacing: 2px;
-            color: var(--hacker-red);
-        }
-
-        .status-bar {
-            font-size: 0.8rem;
-            color: var(--hacker-green);
-            margin-bottom: 15px;
-        }
-
-        /* Onglets الجادين */
-        nav {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            padding: 15px;
-        }
-
-        nav a {
-            background: rgba(255, 0, 60, 0.1);
-            border: 1px solid var(--hacker-red);
-            color: white;
-            text-decoration: none;
-            padding: 12px;
-            text-align: center;
-            font-size: 0.85rem;
-            font-weight: bold;
-            border-radius: 4px;
-            transition: 0.3s;
-        }
-
-        nav a:active {
-            background: var(--hacker-red);
-            box-shadow: 0 0 15px var(--hacker-red);
-        }
-
-        main {
-            padding: 20px;
-            flex: 1;
-        }
-
-        /* Quotes Box */
-        .terminal-box {
-            background: #000;
-            border-left: 3px solid var(--hacker-red);
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
-        }
-
-        .quote-title {
-            color: var(--hacker-red);
-            font-weight: bold;
-            display: block;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-        }
-
-        .quote-text {
-            font-style: italic;
-            line-height: 1.6;
-            font-size: 1.1rem;
-            color: #fff;
-        }
-
-        .destruction-log {
-            color: #888;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.85rem;
-            margin-top: 15px;
-            border-top: 1px solid #333;
-            padding-top: 10px;
-        }
-
-        .btn-target {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            background: var(--hacker-red);
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            border-radius: 5px;
-            box-shadow: 0 4px 15px rgba(255, 0, 60, 0.4);
-            margin-top: 20px;
-        }
-
-        footer {
-            text-align: center;
-            font-size: 0.7rem;
-            padding: 15px;
-            color: #444;
-        }
-    </style>
+h1 {
+    position: absolute;
+    top: 20px;
+}
+</style>
 </head>
+
 <body>
 
-    <header>
-        <div class="hacker-icon">☠</div>
-        <h1>آدم عبابو - CONTROL UNIT</h1>
-        <div class="status-bar">TARGET: IBN ROCHD SCHOOL | STATUS: BREACHING...</div>
-        <div style="background: #00f2ff; color: #000; display: inline-block; padding: 2px 10px; font-weight: bold; font-size: 0.8rem;">
-            CLASS: 1BACSE-6
-        </div>
-    </header>
+<h1>🐍 Snake Game</h1>
+<canvas id="game" width="400" height="400"></canvas>
 
-    <nav>
-        <a href="#">SQL INJECTION</a>
-        <a href="#">BYPASS FIREWALL</a>
-        <a href="#">ADMIN DATABASE</a>
-        <a href="#">EXAM LEAKS</a>
-        <a href="#">SERVER SHUTDOWN</a>
-        <a href="#">PRIVATE LOGS</a>
-    </nav>
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
-    <main>
-        <div class="terminal-box">
-            <span class="quote-title">[SYSTEM_MESSAGE: BLAIZA]</span>
-            <p class="quote-text">
-                "ااا لقحبة كون كان طول رجلة گاعما جمل يتحنى و يهز لقواويد."
-            </p>
-        </div>
+const box = 20;
+let snake = [{x: 200, y: 200}];
+let direction = "RIGHT";
 
-        <div class="terminal-box" style="border-color: var(--hacker-green);">
-            <span class="quote-title" style="color: var(--hacker-green);">[USER_LOG: ADAM]</span>
-            <p class="quote-text">
-                "انا شحال من قحبة دمرتها و حطمت ليها لكاريير ديالها ."
-            </p>
-            <div class="destruction-log">
-                > Career_Status: DESTROYED<br>
-                > Records_Deleted: 100%<br>
-                > No_Mercy_Executed: TRUE
-            </div>
-        </div>
+let food = {
+    x: Math.floor(Math.random()*20)*box,
+    y: Math.floor(Math.random()*20)*box
+};
 
-        <a href="https://ar.wikipedia.org/wiki/ليونيل_ميسي" class="btn-target">
-            ACCESS: ADAM DATABASE (M10)
-        </a>
-    </main>
+let score = 0;
 
-    <footer>
-        &copy; 2026 ABABOU EXPLOIT SERVICES. ALL RIGHTS RESERVED.
-    </footer>
+document.addEventListener("keydown", changeDirection);
+
+function changeDirection(event) {
+    if(event.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
+    else if(event.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
+    else if(event.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
+    else if(event.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
+}
+
+function draw() {
+    ctx.fillStyle = "#111";
+    ctx.fillRect(0,0,400,400);
+
+    // Snake
+    for(let i = 0; i < snake.length; i++) {
+        ctx.fillStyle = (i === 0) ? "lime" : "green";
+        ctx.fillRect(snake[i].x, snake[i].y, box, box);
+    }
+
+    // Food
+    ctx.fillStyle = "red";
+    ctx.fillRect(food.x, food.y, box, box);
+
+    // Move snake
+    let headX = snake[0].x;
+    let headY = snake[0].y;
+
+    if(direction === "LEFT") headX -= box;
+    if(direction === "UP") headY -= box;
+    if(direction === "RIGHT") headX += box;
+    if(direction === "DOWN") headY += box;
+
+    // Eat food
+    if(headX === food.x && headY === food.y) {
+        score++;
+        food = {
+            x: Math.floor(Math.random()*20)*box,
+            y: Math.floor(Math.random()*20)*box
+        };
+    } else {
+        snake.pop();
+    }
+
+    let newHead = {x: headX, y: headY};
+
+    // Game over
+    if(
+        headX < 0 || headY < 0 ||
+        headX >= 400 || headY >= 400 ||
+        collision(newHead, snake)
+    ) {
+        clearInterval(game);
+        alert("Game Over 😢 Score: " + score);
+    }
+
+    snake.unshift(newHead);
+
+    // Score
+    ctx.fillStyle = "white";
+    ctx.fillText("Score: " + score, 10, 20);
+}
+
+function collision(head, array) {
+    for(let i = 0; i < array.length; i++) {
+        if(head.x === array[i].x && head.y === array[i].y) {
+            return true;
+        }
+    }
+    return false;
+}
+
+let game = setInterval(draw, 100);
+</script>
 
 </body>
 </html>
