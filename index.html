@@ -1,90 +1,237 @@
-<!-- This is instagram login page -->
-
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login . Instagram</title>
-    <link rel="stylesheet" href="loginstyle.css">
-    <link rel="shortcut icon" href="/Instagram_logo_2016.svg.webp">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Snake Game</title>
     <style>
-        img {
-            vertical-align: text-top;
+        body {
+            background-color: #222;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            height: 100vh;
+            font-family: sans-serif;
+            overflow: hidden;
+        }
+
+        canvas {
+            border: 2px solid #555;
+            background-color: #000;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: grid;
+            grid-template-areas: 
+                ". up ."
+                "left down right";
+            gap: 10px;
+        }
+
+        button {
+            width: 65px;
+            height: 65px;
+            font-size: 28px;
+            background-color: #444;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:active {
+            background-color: #666;
+            transform: scale(0.95);
+        }
+
+        #up    { grid-area: up; }
+        #left  { grid-area: left; }
+        #down  { grid-area: down; }
+        #right { grid-area: right; }
+
+        .stats {
+            margin-bottom: 10px;
+            font-size: 18px;
         }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <div class="box">
-            <div class="heading"></div>
-            <form class="login-form">
-                <div class="field">
-                    <input id="username" type="name" placeholder="Phone number, username, or email" />
-                    <label for="username">Phone number, username, or email</label>
-                </div>
-                <div class="field">
-                    <input id="password" type="password" placeholder="password" />
-                    <label for="password">Password</label>
-                </div>
-                <button class="login-button" title="login"><a href="wrong_password.html">Log In</button></a>
-                <div class="separator">
-                    <div class="line"></div>
-                    <p>OR</p>
-                    <div class="line"></div>
-                </div>
 
-                <div class="other">
-                    <button class="fb-login-btn" type="button">
-                        <i class="fa fa-facebook-official fb-icon"></i>
-                        <span class=""><img src="https://icons.iconarchive.com/icons/paomedia/small-n-flat/1024/social-facebook-icon.png"height="15" width="15"><a href="facebook-login.html">&nbsp;Log in with Facebook</a>
-                        </span>
-                    </button>
-                    <a class="forgot-password" href="/forget.html">Forgot password?</a>
-                </div>
-            </form>
-        </div>
-        <div class="box">
-            <p>Don't have an account? <a class="signup" href="#">Sign Up</a></p>
-        </div>
-    </div>
-    <br>
-    <div class="get">
-    Get the app.
-    </div>
-    <br>
-    <div class="apps">
-        <a href="/forget.html">
-        <img src="https://static.cdninstagram.com/rsrc.php/v3/yz/r/c5Rp7Ym-Klz.png" height="40"
-            width="134"></a>&NonBreakingSpace;&NonBreakingSpace;&NonBreakingSpace;&NonBreakingSpace;&NonBreakingSpace;<a href="/forget.html"> 
-        <img src="https://static.cdninstagram.com/rsrc.php/v3/yu/r/EHY6QnZYdNX.png" height="40" width="134"></a>
-        </div>
-        <br>
-        <div class="footer">
-    <footer>
-            Meta
-            About
-            Blog
-            Jobs
-            Help
-            API
-            Privacy
-            Terms
-            Top Accounts
-            Hashtags
-            Locations
-            Instagram Lite
-            Contact Uploading & Non-Users
-    </footer>
-</div>
-<div class="copyright">
-    <br>    
-    English © 2022 Instagram from Meta
-</div>
+    <div class="stats">Score: <span id="score">0</span> | Best: <span id="best">0</span></div>
+    
+    <canvas id="gameCanvas"></canvas>
 
+    <div class="controls">
+        <button id="up">↑</button>
+        <button id="left">←</button>
+        <button id="down">↓</button>
+        <button id="right">→</button>
+    </div>
+
+    <script>
+        var canvas = document.getElementById('gameCanvas');
+        var ctx = canvas.getContext('2d');
+        var scoreEl = document.getElementById('score');
+        var bestEl = document.getElementById('best');
+
+        var COLS = 20;
+        var ROWS = 20;
+        var FPS  = 9;
+        var CELL;
+
+        var snake, dir, nextDir, food, score, best, phase, loopTimer;
+
+        // ── State ─────────────────────────────────────────────────────────────────
+
+        function init() {
+            snake   = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
+            dir     = { x: 1, y: 0 };
+            nextDir = { x: 1, y: 0 };
+            score   = 0;
+            scoreEl.innerText = score;
+            placeFood();
+        }
+
+        function placeFood() {
+            do {
+                food = { x: Math.floor(Math.random() * COLS), y: Math.floor(Math.random() * ROWS) };
+            } while (snake.some(function(s) { return s.x === food.x && s.y === food.y; }));
+        }
+
+        function start() {
+            if (loopTimer) clearInterval(loopTimer);
+            init();
+            phase     = 'running';
+            loopTimer = setInterval(tick, 1000 / FPS);
+        }
+
+        // ── Game loop ──────────────────────────────────────────────────────────────
+
+        function tick() {
+            dir = nextDir;
+
+            var head = { 
+                x: (snake[0].x + dir.x + COLS) % COLS,
+                y: (snake[0].y + dir.y + ROWS) % ROWS 
+            };
+
+            // Check collision with self
+            if (snake.some(function(s) { return s.x === head.x && s.y === head.y; })) {
+                phase = 'dead';
+                best  = Math.max(best, score);
+                bestEl.innerText = best;
+                clearInterval(loopTimer);
+                draw();
+                return;
+            }
+
+            snake.unshift(head);
+
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                scoreEl.innerText = score;
+                placeFood();
+            } else {
+                snake.pop();
+            }
+
+            draw();
+        }
+
+        // ── Drawing ──────────────────────────────────────────────────────────────
+
+        function draw() {
+            // Clear background
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Snake
+            snake.forEach(function(part, index) {
+                ctx.fillStyle = (index === 0) ? '#4CAF50' : '#2E7D32';
+                ctx.fillRect(part.x * CELL, part.y * CELL, CELL - 1, CELL - 1);
+            });
+
+            // Draw Food
+            ctx.fillStyle = '#FF5252';
+            ctx.fillRect(food.x * CELL, food.y * CELL, CELL - 1, CELL - 1);
+
+            // Draw Text Overlays
+            if (phase === 'idle') {
+                showText("اضغط سهم للبدء");
+            } else if (phase === 'dead') {
+                showText("انتهت اللعبة! اضغط للبدء");
+            }
+        }
+
+        function showText(msg) {
+            ctx.fillStyle = "rgba(0,0,0,0.5)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            ctx.font = "20px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText(msg, canvas.width / 2, canvas.height / 2);
+        }
+
+        // ── Resize ────────────────────────────────────────────────────────────────
+
+        function resize() {
+            var padding = 40;
+            var availableHeight = window.innerHeight - 250; // space for buttons/text
+            var size = Math.min(window.innerWidth - padding, availableHeight);
+            
+            CELL = Math.floor(size / COLS);
+            var px = CELL * COLS;
+            canvas.width  = px;
+            canvas.height = px;
+            draw();
+        }
+
+        window.addEventListener('resize', resize);
+
+        // ── Input & Controls ────────────────────────────────────────────────────────
+
+        function handleInput(key) {
+            if (phase !== 'running') {
+                start();
+                return;
+            }
+            
+            if (key === 'up'    && dir.y === 0) nextDir = { x: 0, y: -1 };
+            if (key === 'down'  && dir.y === 0) nextDir = { x: 0, y: 1 };
+            if (key === 'left'  && dir.x === 0) nextDir = { x: -1, y: 0 };
+            if (key === 'right' && dir.x === 0) nextDir = { x: 1, y: 0 };
+        }
+
+        document.getElementById('up').onclick    = function() { handleInput('up'); };
+        document.getElementById('down').onclick  = function() { handleInput('down'); };
+        document.getElementById('left').onclick  = function() { handleInput('left'); };
+        document.getElementById('right').onclick = function() { handleInput('right'); };
+
+        // Keyboard support too
+        window.onkeydown = function(e) {
+            if (e.key === 'ArrowUp')    handleInput('up');
+            if (e.key === 'ArrowDown')  handleInput('down');
+            if (e.key === 'ArrowLeft')  handleInput('left');
+            if (e.key === 'ArrowRight') handleInput('right');
+        };
+
+        // ── Boot ──────────────────────────────────────────────────────────────────
+
+        best  = 0;
+        phase = 'idle';
+        init();
+        resize();
+
+    </script>
 </body>
-
 </html>
